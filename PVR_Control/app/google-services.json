@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "515446482117",
+    "project_id": "pvrcontrol-d129c",
+    "storage_bucket": "pvrcontrol-d129c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515446482117:android:24cd90132a1c6c618abcac",
+        "android_client_info": {
+          "package_name": "com.pedrosaez.pvr_control"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "515446482117-m5euvjin13bagpt7f9rgfnfusotene9k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBNq58pCGEyVHQVElgeTAh5oi_XWBi_Rg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "515446482117-m5euvjin13bagpt7f9rgfnfusotene9k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
