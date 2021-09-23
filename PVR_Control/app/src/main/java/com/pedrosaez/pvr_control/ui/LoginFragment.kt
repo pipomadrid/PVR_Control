@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import com.pedrosaez.pvr_control.databinding.FragmentLoginBinding
 
 
@@ -16,6 +18,9 @@ class LoginFragment : Fragment() {
 
     //variable de tipo interfaz LoginListen para comunicarnos con la mainActivity
     private lateinit var listener:LoginListener
+
+    //variable para uso de firebase
+    private lateinit var auth:FirebaseAuth
 
     // Interfaz para comunicarnos con mainActivity
     interface LoginListener {
