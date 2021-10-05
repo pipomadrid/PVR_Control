@@ -1,11 +1,24 @@
 <resources>
     <string name="app_name">PVR_Control</string>
-    <string name="acceder">Acceder</string>
-    <string name="registrar">Registrar</string>
+    <string name="signIn">Acceder</string>
+    <string name="signUp">Registrar</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
-    <string name="olvido_contra">¿Has olvidado la contraseña?</string>
+    <string name="forgot_password">¿Has olvidado la contraseña?</string>
+    <string name="no_valid_mail">Introduce un email valido</string>
+    <string name="email_exists">El email ya existe</string>
+    <string name="password_weak">La contraseña debe tener 8 caracteres</string>
+    <string name="used_email">El email ya está en uso</string>
+    <string name="name_surname">Nombre y apellidos titular</string>
+    <string name="address">Direccion del PVR</string>
+    <string name="name_Pvr">Nombre del PVR</string>
+    <string name="phone">Teléfono</string>
+    <string name="prefs_file">com.pedrosaez.pvr_control.PREFERENCES_FILE_KEY</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="app_title">PVR Control</string>
 </resources>
