@@ -1,4 +1,4 @@
-package com.pedrosaez.pvr_control.ui
+package com.pedrosaez.pvr_control.ui.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

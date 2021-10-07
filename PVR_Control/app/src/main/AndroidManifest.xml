@@ -13,11 +13,11 @@
         android:theme="@style/Theme.PVR_Control"
         android:name=".application.App">
         <activity
-            android:name=".ui.HomeActivity"
+            android:name=".ui.view.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.PVR_Control.NoActionBar">
         </activity>
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

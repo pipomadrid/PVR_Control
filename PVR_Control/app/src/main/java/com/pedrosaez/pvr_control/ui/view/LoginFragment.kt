@@ -1,4 +1,4 @@
-package com.pedrosaez.pvr_control.ui
+package com.pedrosaez.pvr_control.ui.view
 
 import android.app.AlertDialog
 import android.content.Context
@@ -9,11 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
 import com.pedrosaez.pvr_control.R
-import com.pedrosaez.pvr_control.databinding.FragmentAddPvrBinding
 import com.pedrosaez.pvr_control.databinding.FragmentLoginBinding
 import com.pedrosaez.pvr_control.ui.viewmodel.UserViewModel
 
@@ -30,7 +30,7 @@ class LoginFragment : Fragment() {
     //variable para uso de firebase
     private lateinit var auth:FirebaseAuth
 
-    private val model = UserViewModel()
+    val model:UserViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -76,7 +76,7 @@ class LoginFragment : Fragment() {
 
     //funcion para navegar al homefragment
     private fun goHome(fragment: Fragment){
-        val intent = Intent(requireContext(),HomeActivity::class.java)
+        val intent = Intent(requireContext(), HomeActivity::class.java)
         startActivity(intent)
     }
     //Funcion que muestra un dialogo de alerta

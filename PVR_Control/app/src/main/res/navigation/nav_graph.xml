@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.pedrosaez.pvr_control.ui.LoginFragment"
+        android:name="com.pedrosaez.pvr_control.ui.view.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.pedrosaez.pvr_control.ui.RegisterFragment"
+        android:name="com.pedrosaez.pvr_control.ui.view.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_register">
         <action

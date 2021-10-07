@@ -1,4 +1,4 @@
-package com.pedrosaez.pvr_control.ui
+package com.pedrosaez.pvr_control.ui.view
 
 import android.app.AlertDialog
 import android.content.Context
@@ -184,7 +184,7 @@ class RegisterFragment : Fragment() {
     private fun goLogin(fragment: Fragment){
         val userEmail = binding.etEmailRegister.text.toString()
         val userPassword = binding.etPasswordRegister.text.toString()
-        val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment(userEmail,userPassword)
+        val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment(userEmail, userPassword)
         NavHostFragment.findNavController(fragment).navigate(action)
     }
 
