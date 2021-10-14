@@ -30,10 +30,7 @@ class HomeActivity : AppCompatActivity() {
                     0 -> {
                         tab.text = "Mis Pvr"
                     }
-                    1 -> {
-                        tab.text = "ventas"
-                    }
-                    2 -> {
+                    1-> {
                         tab.text = "totales"
                     }
                 }

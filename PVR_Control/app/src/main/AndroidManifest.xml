@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PVR_Control"
-        android:name=".application.App">
+        android:name=".application.App"
+        android:hardwareAccelerated="true">
         <activity
             android:name=".ui.view.HomeActivity"
             android:label="@string/title_activity_home"

@@ -1,5 +1,6 @@
 package com.pedrosaez.pvr_control.data.converters
 
+import androidx.annotation.Nullable
 import androidx.room.TypeConverter
 import java.util.*
 
@@ -15,6 +16,6 @@ class Converters {
     }
     //convertir tipo date en Long al guardar en base de datos
     @TypeConverter
-    fun toLong(date:Date): Long = date.time
+    fun toLong(date:Date?): Long? = date?.time
 
 }

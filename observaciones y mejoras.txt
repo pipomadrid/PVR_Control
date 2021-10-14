@@ -4,3 +4,4 @@ comprobar que los textos del codigo esten en ingles
 mandar push cuando la autorización esté proxima a finalizar
 hacer logo
 mostrar  progress bar donde se necesite
+poder llamar al telefono del PVR desde la app

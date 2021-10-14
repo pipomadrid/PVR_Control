@@ -6,9 +6,7 @@ import com.pedrosaez.pvr_control.data.entities.DatosPvr
 @Dao
 abstract class DatosPvrDao:BaseDao<DatosPvr>() {
 
-    @Query("SELECT * from datosPvrs")
-    abstract suspend fun  findAll():List<DatosPvr>
-
-
+    @Query(value = "SELECT * FROM datos_pvrs")
+    abstract suspend fun findAll():MutableList<DatosPvr>
 
 }

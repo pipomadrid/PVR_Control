@@ -7,15 +7,23 @@ import android.content.DialogInterface
 import android.os.Build
 
 import android.os.Bundle
+import android.text.BoringLayout
+import android.text.TextUtils.replace
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.data.entities.DatosPvr
 import com.pedrosaez.pvr_control.databinding.AddDialogBinding
+import com.pedrosaez.pvr_control.ui.adapter.PvrAdapter
+import com.pedrosaez.pvr_control.ui.view.AddPvrFragment
 import com.pedrosaez.pvr_control.ui.viewmodel.AddPvrViewModel
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -32,47 +40,69 @@ class AddPvrDialogFragment:DialogFragment(){
     private var _binding: AddDialogBinding?= null
     private val binding get() = _binding!!
 
-
     private lateinit var pvr:DatosPvr
+    companion object {
+        var flag: String=" "
+    }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
            _binding = AddDialogBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it)
 
-            //obtenemos los valores de los campos
-
-
             builder.setView(binding.root)
 
-            val address = binding.etAddress.text
-            val pvrName = binding.etPvrName.text
-            val phone = binding.etTelephone.text
-            val nameSurname= binding.etNameAndSurname.text
+            //obtenemos los valores de los campos
+            val address = binding.etAddress
+            val pvrName = binding.etPvrName
+            val phone = binding.etTelephone
+            val nameSurname = binding.etNameAndSurname
             val authDate = binding.etAuthDate
-            val model:AddPvrViewModel by viewModels()
-            val calendar = Calendar.getInstance()
+
+
+
+            val model: AddPvrViewModel by viewModels()
+            var calendar: Calendar = Calendar.getInstance()
 
             authDate.setOnClickListener {
-                showDatePickerDialog(authDate,calendar)
+                showDatePickerDialog(authDate, calendar!!)
             }
 
+
             builder.setPositiveButton("Guardar",
-                            DialogInterface.OnClickListener { dialog, id ->
-                                if(!nameSurname.isNullOrEmpty() && !pvrName.isNullOrEmpty()){
-                                    pvr= DatosPvr(pvrName.toString(),nameSurname.toString(),address.toString(),phone.toString().toInt(),calendar.time)
+                            DialogInterface.OnClickListener { dialog, id->
+                                if(!nameSurname.text.toString().isNullOrEmpty() && !pvrName.text.toString().isNullOrEmpty()){
+
+                                    val addressPvr = address.text?.toString() ?: " "
+                                    val phonePvr = phone.text?.toString() ?: " "
+                                    var calendarPvr:Date? = calendar.time
+                                    val authDateString = binding.etAuthDate.text.toString()
+                                    if(authDateString.isEmpty()){
+                                        calendarPvr = null
+                                    }
+
+                                    pvr= DatosPvr(pvrName.text.toString(),nameSurname.text.toString(), addressPvr,phonePvr, calendarPvr)
+
                                     model.save(pvr)
+                                    //refrescar el fragment home para mostrar los nuevos datos del recyclerView
+
+                                    val fragment = AddPvrFragment()
+                                    fragment.refreshRecyclerView()
+
                                 }else{
-                                    Toast.makeText(requireContext(),"Los campos nombre y datos del titular no pueden estar vacíos",Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,"Los campos nombre y datos del titular no pueden estar vacíos",Toast.LENGTH_LONG).show()
+                                    getDialog()?.cancel()
                                 }
+
+
                             })
             builder.setNegativeButton("Cancelar",
                             DialogInterface.OnClickListener { dialog, id ->
                                 getDialog()?.cancel()
                             })
             builder.create()
+
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
@@ -92,5 +122,6 @@ class AddPvrDialogFragment:DialogFragment(){
 
 
 }
+
 //Funcion de extensión de la clase Int para mostrar dos dígitos
 fun Int.twoDigits() = if (this <= 9) "0$this" else this.toString()

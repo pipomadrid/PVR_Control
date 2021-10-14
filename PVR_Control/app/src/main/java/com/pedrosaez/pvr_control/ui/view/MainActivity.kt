@@ -1,11 +1,14 @@
 package com.pedrosaez.pvr_control.ui.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.pedrosaez.pvr_control.R
-import com.pedrosaez.pvr_control.application.App
 import com.pedrosaez.pvr_control.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity()  {
 
@@ -16,8 +19,6 @@ class MainActivity : AppCompatActivity()  {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
     }
-
 
 }

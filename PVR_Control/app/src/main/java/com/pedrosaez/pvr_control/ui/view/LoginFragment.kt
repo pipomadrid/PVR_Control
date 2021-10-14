@@ -3,11 +3,14 @@ package com.pedrosaez.pvr_control.ui.view
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -42,9 +45,10 @@ class LoginFragment : Fragment() {
         // setup
         val email = binding.etEmailLogin
         val password = binding.etPasswordLogin
+        val authLayout = binding.authlayout
         email.setText(args.userEmail)
         password.setText(args.userPassword)
-        session()
+        session(authLayout)
 
 
         binding.btAccederLogin.setOnClickListener {
@@ -98,11 +102,12 @@ class LoginFragment : Fragment() {
 
     }
 
-    //funcion para comprobar si hay un usuario logeado  y mantener la sesion
-    private fun session(){
+    //funcion para comprobar si hay un usuario logeado, ocultar el layout del login  y mantener la sesion
+    private fun session(layout:ConstraintLayout){
         val prefs= requireContext().getSharedPreferences(getString(R.string.prefs_file),Context.MODE_PRIVATE)
         val email = prefs.getString("email",null)
         if(email != null){
+            layout.visibility = View.INVISIBLE
             goHome(this)
         }
 
