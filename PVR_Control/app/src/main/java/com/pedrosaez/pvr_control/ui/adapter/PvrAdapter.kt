@@ -1,28 +1,22 @@
 package com.pedrosaez.pvr_control.ui.adapter
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.data.entities.DatosPvr
 import com.pedrosaez.pvr_control.ui.dialog.AddPvrDialogFragment
-import com.pedrosaez.pvr_control.ui.view.AddPvrFragment
-import com.pedrosaez.pvr_control.ui.view.DeletePvr
-import com.pedrosaez.pvr_control.ui.viewmodel.AddPvrViewModel
+import com.pedrosaez.pvr_control.ui.view.UpdateRecyclerView
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PvrAdapter(private val context: Context,private val pvr_list:MutableList<DatosPvr>,val deletePvr:DeletePvr):RecyclerView.Adapter<PvrAdapter.MyViewHolder>(){
+class PvrAdapter( val context: Context, val pvr_list:MutableList<DatosPvr>,val updateRecyclerView: UpdateRecyclerView):RecyclerView.Adapter<PvrAdapter.MyViewHolder>(){
 
 
 
@@ -64,12 +58,7 @@ class PvrAdapter(private val context: Context,private val pvr_list:MutableList<D
             builder.setMessage("¿Estas seguro de eliminar a este PVR?")
                     .setPositiveButton("Eliminar",
                             DialogInterface.OnClickListener { dialog, id ->
-                                //eliminamos el elemento pulsado
-                                pvr_list.removeAt(position)
-                                //notificamos la eliminacion para que actualize datos el recycler
-                                notifyItemRemoved(position);
-                                notifyItemRangeChanged(position,pvr_list.size);
-                                deletePvr.delete(item)
+                                updateRecyclerView.delete(item)
                             })
                     .setNegativeButton(("cancelar"),
                             DialogInterface.OnClickListener { dialog, id ->
@@ -126,6 +115,24 @@ class PvrAdapter(private val context: Context,private val pvr_list:MutableList<D
         holder.expirationDate.text = authExpirationDate
         holder.phone.text = pvr.phone
 
+    }
+
+    fun createPvr(pvr: DatosPvr) {
+        pvr_list.add(pvr)
+        val pos=pvr_list.indexOf(pvr)
+        notifyItemInserted(pvr_list.size)
+    }
+
+     fun deletePvr(pvr: DatosPvr) {
+        val pos = pvr_list.indexOf(pvr)
+        pvr_list.removeAt(pos)
+        notifyItemRemoved(pos)
+    }
+
+    fun updatePvr(pvr: DatosPvr) {
+        val pos = pvr_list.indexOf(pvr)
+        pvr_list[pos] = pvr
+        notifyItemChanged(pos)
     }
 
 }

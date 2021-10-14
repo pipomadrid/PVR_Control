@@ -31,6 +31,9 @@ class AddPvrViewModel:ViewModel() {
         }
     }
 
+    fun getPvr():LiveData<List<DatosPvr>> {
+        return _pvr_list
+    }
 
     private fun loadDatosPvr() {
         //SIMULANDO LA CONEXIÓN A LA BD

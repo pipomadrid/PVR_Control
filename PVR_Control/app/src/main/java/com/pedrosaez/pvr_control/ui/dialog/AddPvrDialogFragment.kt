@@ -24,6 +24,7 @@ import com.pedrosaez.pvr_control.data.entities.DatosPvr
 import com.pedrosaez.pvr_control.databinding.AddDialogBinding
 import com.pedrosaez.pvr_control.ui.adapter.PvrAdapter
 import com.pedrosaez.pvr_control.ui.view.AddPvrFragment
+import com.pedrosaez.pvr_control.ui.view.UpdateRecyclerView
 import com.pedrosaez.pvr_control.ui.viewmodel.AddPvrViewModel
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -34,11 +35,13 @@ import java.util.logging.SimpleFormatter
 
 
 // Creamos un dialogo que nos va a servir para introducir los datos del PVR desde el homeFragment
-class AddPvrDialogFragment:DialogFragment(){
+class AddPvrDialogFragment(val updateRecyclerView: UpdateRecyclerView):DialogFragment()
+{
 
 
     private var _binding: AddDialogBinding?= null
     private val binding get() = _binding!!
+
 
     private lateinit var pvr:DatosPvr
     companion object {
@@ -84,11 +87,8 @@ class AddPvrDialogFragment:DialogFragment(){
 
                                     pvr= DatosPvr(pvrName.text.toString(),nameSurname.text.toString(), addressPvr,phonePvr, calendarPvr)
 
-                                    model.save(pvr)
+                                     updateRecyclerView.create(pvr)
                                     //refrescar el fragment home para mostrar los nuevos datos del recyclerView
-
-                                    val fragment = AddPvrFragment()
-                                    fragment.refreshRecyclerView()
 
                                 }else{
                                     Toast.makeText(context,"Los campos nombre y datos del titular no pueden estar vacíos",Toast.LENGTH_LONG).show()

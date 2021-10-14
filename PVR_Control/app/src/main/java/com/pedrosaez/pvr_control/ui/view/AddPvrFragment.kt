@@ -19,7 +19,7 @@ import com.pedrosaez.pvr_control.ui.dialog.AddPvrDialogFragment
 import com.pedrosaez.pvr_control.ui.viewmodel.AddPvrViewModel
 
 
-class AddPvrFragment : Fragment(),DeletePvr {
+class AddPvrFragment : Fragment(),UpdateRecyclerView {
 
 
     // variables para crear el binding en los fragment
@@ -37,10 +37,9 @@ class AddPvrFragment : Fragment(),DeletePvr {
         _binding = FragmentAddPvrBinding.inflate(layoutInflater)
 
 
-        val recyclerView = _binding!!.reciclerViewPvr
-        val addDialog: AddPvrDialogFragment = AddPvrDialogFragment()
+        val addDialog: AddPvrDialogFragment = AddPvrDialogFragment(this)
 
-        model._pvr_list.observe(viewLifecycleOwner, { //--> RECIBO NOTIFICACIÓN DE DATOS NUEVOS
+        model.getPvr().observe(viewLifecycleOwner, { //--> RECIBO NOTIFICACIÓN DE DATOS NUEVOS
             createRecyclerView(it)
 
         })
@@ -49,7 +48,7 @@ class AddPvrFragment : Fragment(),DeletePvr {
 
         //al pulsar el floatingButton creamos el dialogo para añadir PVR
         binding.btNewPvr.setOnClickListener {
-            addDialog.show(parentFragmentManager, "dialog")
+            addDialog.show(childFragmentManager, "dialog")
         }
 
         //cerramos sesion y volvemos al login borrando las sharepreferences
@@ -89,10 +88,17 @@ class AddPvrFragment : Fragment(),DeletePvr {
     }
 
     override fun delete(pvr: DatosPvr) {
+        mAdapterProductos.deletePvr(pvr)
         model.delete(pvr)
     }
 
-    fun refreshRecyclerView(){
-        mAdapterProductos.notifyDataSetChanged()
+    override fun update(pvr: DatosPvr) {
+        TODO("Not yet implemented")
     }
+
+    override fun create(pvr: DatosPvr) {
+        model.save(pvr)
+        mAdapterProductos.createPvr(pvr)
+    }
+
 }
