@@ -15,13 +15,11 @@
         android:hardwareAccelerated="true">
         <activity
             android:name=".ui.view.HomeActivity"
-            android:label="@string/title_activity_home"
-            android:theme="@style/Theme.PVR_Control.NoActionBar">
+            android:label="@string/title_activity_home">
         </activity>
         <activity android:name=".ui.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

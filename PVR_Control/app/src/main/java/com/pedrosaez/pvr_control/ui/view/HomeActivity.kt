@@ -20,6 +20,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        title = "PVR Control"
 
 
         val pagerAdapter = ViewPagerAdapter(this)
