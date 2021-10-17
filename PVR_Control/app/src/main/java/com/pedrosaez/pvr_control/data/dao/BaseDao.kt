@@ -22,6 +22,7 @@ abstract class BaseDao<T> where T:BaseEntity{
 
     fun update(t: T) {
         t.updateAt = Date(System.currentTimeMillis())
+        updateProtect(t)
     }
 
 }

@@ -15,10 +15,12 @@ import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.data.entities.DatosPvr
 import com.pedrosaez.pvr_control.databinding.AddDialogBinding
@@ -44,9 +46,6 @@ class AddPvrDialogFragment(val updateRecyclerView: UpdateRecyclerView):DialogFra
 
 
     private lateinit var pvr:DatosPvr
-    companion object {
-        var flag: String=" "
-    }
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -62,41 +61,56 @@ class AddPvrDialogFragment(val updateRecyclerView: UpdateRecyclerView):DialogFra
             val phone = binding.etTelephone
             val nameSurname = binding.etNameAndSurname
             val authDate = binding.etAuthDate
+            val viewParentfragment: View? = parentFragment?.requireView()
 
 
 
             val model: AddPvrViewModel by viewModels()
-            var calendar: Calendar = Calendar.getInstance()
+            val calendar: Calendar = Calendar.getInstance()
 
             authDate.setOnClickListener {
                 showDatePickerDialog(authDate, calendar!!)
             }
 
 
-            builder.setPositiveButton("Guardar",
-                            DialogInterface.OnClickListener { dialog, id->
-                                if(!nameSurname.text.toString().isNullOrEmpty() && !pvrName.text.toString().isNullOrEmpty()){
+            builder.setPositiveButton(
 
-                                    val addressPvr = address.text?.toString() ?: " "
-                                    val phonePvr = phone.text?.toString() ?: " "
-                                    var calendarPvr:Date? = calendar.time
-                                    val authDateString = binding.etAuthDate.text.toString()
-                                    if(authDateString.isEmpty()){
-                                        calendarPvr = null
-                                    }
+                    if (tag == "AddDialog") {
+                        "Guardar"
+                    } else "Actualizar",
 
-                                    pvr= DatosPvr(pvrName.text.toString(),nameSurname.text.toString(), addressPvr,phonePvr, calendarPvr)
+                    DialogInterface.OnClickListener { dialog, id ->
 
-                                     updateRecyclerView.create(pvr)
-                                    //refrescar el fragment home para mostrar los nuevos datos del recyclerView
+                        //tomamos los valores de los editText y los asignamos
+                        val addressPvr = address.text?.toString() ?: " "
+                        val phonePvr = phone.text?.toString() ?: " "
+                        var calendarPvr: Date? = calendar.time
+                        val authDateString = binding.etAuthDate.text.toString()
+                        if (authDateString.isEmpty()) {
+                            calendarPvr = null
+                        }
+                        // creamos un nuevo Pvr con los datos introducidos en el Dialog para crear o actualizar según el caso
+                        pvr = DatosPvr(pvrName.text.toString(), nameSurname.text.toString(), addressPvr, phonePvr, calendarPvr)
 
-                                }else{
-                                    Toast.makeText(context,"Los campos nombre y datos del titular no pueden estar vacíos",Toast.LENGTH_LONG).show()
-                                    getDialog()?.cancel()
-                                }
+                        if (tag == "AddDialog") {
+                            if (nameSurname.text.toString().isNotEmpty() && pvrName.text.toString().isNotEmpty()) {
+
+                                updateRecyclerView.create(pvr)
+
+                            } else {
+                                // Al crear un nuevo Pvr nos aseguramos de que los campos nombre y datos del titular no esten vacios
+                                Snackbar.make(viewParentfragment!!, getString(R.string.fields_cant_be_empty), Snackbar.LENGTH_LONG)
+                                        .setAnchorView(R.id.bt_new_pvr)
+                                        .show()
+                            }
+
+                        } else {
+                            //Cuando el tag es actualizar  llamamos al metodo update
+                            updateRecyclerView.update(pvr)
+                        }
 
 
-                            })
+                    })
             builder.setNegativeButton("Cancelar",
                             DialogInterface.OnClickListener { dialog, id ->
                                 getDialog()?.cancel()

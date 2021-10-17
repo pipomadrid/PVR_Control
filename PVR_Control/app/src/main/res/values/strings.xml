@@ -22,4 +22,7 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="app_title">PVR Control</string>
     <string name="auth_date">Fecha inicio autorización</string>
+    <string name="fields_cant_be_empty">Los campos nombre y datos del titular no pueden estar vacíos</string>
+    <string name="no_data_found_to_update_pvr">No se encontraron datos para actualizar Pvr</string>
+    <string name="close_session">Cerrar Sesión</string>
 </resources>

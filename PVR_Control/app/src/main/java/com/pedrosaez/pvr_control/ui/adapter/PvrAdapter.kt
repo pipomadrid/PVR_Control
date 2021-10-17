@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.data.entities.DatosPvr
@@ -16,7 +17,8 @@ import com.pedrosaez.pvr_control.ui.view.UpdateRecyclerView
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PvrAdapter( val context: Context, val pvr_list:MutableList<DatosPvr>,val updateRecyclerView: UpdateRecyclerView):RecyclerView.Adapter<PvrAdapter.MyViewHolder>(){
+
+class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val updateRecyclerView: UpdateRecyclerView):RecyclerView.Adapter<PvrAdapter.MyViewHolder>(){
 
 
 
@@ -39,7 +41,7 @@ class PvrAdapter( val context: Context, val pvr_list:MutableList<DatosPvr>,val u
     // El método crea y, luego, inicializa la ViewHolder y su View asociada,
     // pero no completa el contenido de la vista; aún no se vinculó la ViewHolder con datos específicos.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val adapterLayout = LayoutInflater.from(context).inflate(R.layout.list_pvr,parent,false)
+        val adapterLayout = LayoutInflater.from(context).inflate(R.layout.list_pvr, parent, false)
         return  MyViewHolder(adapterLayout)
     }
 
@@ -47,10 +49,7 @@ class PvrAdapter( val context: Context, val pvr_list:MutableList<DatosPvr>,val u
     // vincula los datos de cada elemento del datasource(listas en este caso) con las vistas correspondientes
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = pvr_list[position]
-        bind(holder,item)
-        if(AddPvrDialogFragment.flag =="añadido"){
-            notifyItemChanged(position)
-        }
+        bind(holder, item)
         holder.delete_button.setOnClickListener {
 
             //Creamos un alert dialog para confirmar la eliminacion
@@ -67,7 +66,16 @@ class PvrAdapter( val context: Context, val pvr_list:MutableList<DatosPvr>,val u
             // Create the AlertDialog object and return it
             builder.create()
             builder.show()
-        } ?: throw IllegalStateException("Activity cannot be null")
+        }
+
+        holder.edit_button.setOnClickListener {
+            val actualPvr = pvr_list[position]
+            updateRecyclerView.sendActualPvr(actualPvr)
+            val updateDialog= AddPvrDialogFragment(updateRecyclerView)
+            val manager= (context as AppCompatActivity).supportFragmentManager
+            updateDialog.show(manager, "updateDialog")
+
+        }
     }
 
 
@@ -91,7 +99,7 @@ class PvrAdapter( val context: Context, val pvr_list:MutableList<DatosPvr>,val u
 
 
 
-    private fun bind(holder: PvrAdapter.MyViewHolder, pvr:DatosPvr){
+    private fun bind(holder: PvrAdapter.MyViewHolder, pvr: DatosPvr){
 
 
         var authExpirationDate:String = " "
@@ -119,7 +127,6 @@ class PvrAdapter( val context: Context, val pvr_list:MutableList<DatosPvr>,val u
 
     fun createPvr(pvr: DatosPvr) {
         pvr_list.add(pvr)
-        val pos=pvr_list.indexOf(pvr)
         notifyItemInserted(pvr_list.size)
     }
 

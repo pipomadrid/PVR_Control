@@ -7,8 +7,8 @@ import java.util.*
 
 
 @Entity(tableName= "datos_pvrs" )
-data class DatosPvr(@ColumnInfo(name = "pvr_name") val pvrName:String, @ColumnInfo(name = "name_surname") val nameSurname:String,
-                    val address:String, val phone:String,@Nullable val authDate: Date? ):BaseEntity(){
+data class DatosPvr(@ColumnInfo(name = "pvr_name") var pvrName:String, @ColumnInfo(name = "name_surname") var nameSurname:String,
+                    var address:String, var phone:String, @Nullable var authDate: Date? ):BaseEntity(){
 
 
 }

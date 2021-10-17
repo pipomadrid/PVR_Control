@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 
 class AddPvrViewModel:ViewModel() {
 
-    val db = App.obtenerDatabase()
+    private val db = App.obtenerDatabase()
 
 
     fun save(pvr: DatosPvr) {
@@ -23,6 +23,24 @@ class AddPvrViewModel:ViewModel() {
         }
 
     }
+
+    fun update(pvr: DatosPvr) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                db.datosPvrDao().update(pvr)
+            }
+        }
+
+    }
+    fun delete(pvr: DatosPvr) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                db.datosPvrDao().delete(pvr)
+            }
+        }
+
+    }
+
 
     val _pvr_list: MutableLiveData<List<DatosPvr>> by lazy {
         // also --> Quiero hacer algo más, en este caso introducir datos
@@ -47,12 +65,5 @@ class AddPvrViewModel:ViewModel() {
 
     }
 
-    fun delete(pvr: DatosPvr) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                db.datosPvrDao().delete(pvr)
-            }
-        }
 
-    }
 }
