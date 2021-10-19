@@ -1,4 +1,4 @@
-package com.pedrosaez.pvr_control.ui.view
+package com.pedrosaez.pvr_control.ui.view.fragments
 
 import android.app.AlertDialog
 import android.content.Context
@@ -88,7 +88,6 @@ class RegisterFragment : Fragment() {
         }
 
         //Informacion sobre errores al introducir texto en los campos
-
         passwordConfirm.addTextChangedListener {
             val size = it!!.length
             if(size<8){
@@ -97,6 +96,7 @@ class RegisterFragment : Fragment() {
                 tilPasswordConfirm.error =""
 
         }
+
         email.addTextChangedListener {
             if(!Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches()){
                 tilEmail.setError(requireContext().getString(R.string.no_valid_mail))
@@ -112,9 +112,11 @@ class RegisterFragment : Fragment() {
             if (validateEmail(email, tilEmail) && validatePassword(password, tilPassword) && validatePasswordConfirm(password,passwordConfirm, tilPasswordConfirm)) {
                 //Observamos el livedata de tipo excepcion del viewmodel y si hay una excepcion actuamos en consecuencia
                   model.signUp(email.text.toString(), password.text.toString()).observe(requireActivity(),{exception->
+                      // si no hay fallos navegamos a la pantalla de login
                       if(exception == null){
                           goLogin(this)
                       }else{
+                          // si hay excepcion mostramos mensaje correspondiente
                           when(exception){
                               is FirebaseAuthUserCollisionException -> {
                                   tilEmail.error = getString(R.string.used_email)
@@ -152,13 +154,13 @@ class RegisterFragment : Fragment() {
     fun validatePassword(password: EditText, textInputLayout: TextInputLayout):Boolean{
 
         if(password.text.isNullOrEmpty()){
-            textInputLayout.error = "El campo no puede estar vacío"
+            textInputLayout.error = getString(R.string.field_empty)
             return false
         }
         if(password.text.toString().length < 8){
+            textInputLayout.error = getString(R.string.password_too_short)
             return false
         }
-
 
         return true
     }
@@ -167,14 +169,11 @@ class RegisterFragment : Fragment() {
     fun validatePasswordConfirm(password:EditText,passwordConfirm: EditText, textInputLayout: TextInputLayout):Boolean{
 
         if(passwordConfirm.text.isNullOrEmpty()){
-            textInputLayout.error = "El campo no puede estar vacío"
-            return false
-        }
-        if(passwordConfirm.text.toString().length < 8){
+            textInputLayout.error = getString(R.string.field_empty)
             return false
         }
         if(password.text.toString()!=passwordConfirm.text.toString()){
-            textInputLayout.error = "Las contraseñas deben coincidir"
+            textInputLayout.error = getString(R.string.password_must_match)
         }
 
         return true

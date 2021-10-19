@@ -11,14 +11,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.pedrosaez.pvr_control.R
-import com.pedrosaez.pvr_control.data.entities.DatosPvr
+import com.pedrosaez.pvr_control.database.entities.DatosPvr
 import com.pedrosaez.pvr_control.ui.dialog.AddPvrDialogFragment
-import com.pedrosaez.pvr_control.ui.view.UpdateRecyclerView
+import com.pedrosaez.pvr_control.ui.listeners.PvrModificationListener
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val updateRecyclerView: UpdateRecyclerView):RecyclerView.Adapter<PvrAdapter.MyViewHolder>(){
+class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val updateRecyclerView: PvrModificationListener):RecyclerView.Adapter<PvrAdapter.MyViewHolder>(){
 
 
 

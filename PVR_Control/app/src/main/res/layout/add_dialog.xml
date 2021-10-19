@@ -24,11 +24,11 @@
             android:id="@+id/etAuthDate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="date"
-            android:clickable="true"
+            android:inputType="none"
+            android:focusable="false"
             android:maxLines="1"
-            android:imeOptions="actionDone"
-            android:focusableInTouchMode="true"/>
+            android:textIsSelectable="true"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,8 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="number"
-            android:imeOptions="actionNext"
-            android:nextFocusDown="@id/etAuthDate"
+            android:imeOptions="actionDone"
             />
 
     </com.google.android.material.textfield.TextInputLayout>

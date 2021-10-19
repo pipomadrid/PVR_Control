@@ -1,4 +1,4 @@
-package com.pedrosaez.pvr_control.data.entities
+package com.pedrosaez.pvr_control.database.entities
 
 import androidx.annotation.Nullable
 import androidx.room.ColumnInfo

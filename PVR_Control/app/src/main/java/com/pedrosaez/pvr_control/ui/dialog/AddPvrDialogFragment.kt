@@ -3,41 +3,30 @@ package com.pedrosaez.pvr_control.ui.dialog
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
-import android.os.Build
 
 import android.os.Bundle
-import android.text.BoringLayout
-import android.text.TextUtils.replace
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.DatePicker
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.pedrosaez.pvr_control.R
-import com.pedrosaez.pvr_control.data.entities.DatosPvr
+import com.pedrosaez.pvr_control.database.entities.DatosPvr
 import com.pedrosaez.pvr_control.databinding.AddDialogBinding
-import com.pedrosaez.pvr_control.ui.adapter.PvrAdapter
-import com.pedrosaez.pvr_control.ui.view.AddPvrFragment
-import com.pedrosaez.pvr_control.ui.view.UpdateRecyclerView
+import com.pedrosaez.pvr_control.ui.listeners.PvrModificationListener
 import com.pedrosaez.pvr_control.ui.viewmodel.AddPvrViewModel
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.logging.SimpleFormatter
 
 
 // Creamos un dialogo que nos va a servir para introducir los datos del PVR desde el homeFragment
-class AddPvrDialogFragment(val updateRecyclerView: UpdateRecyclerView):DialogFragment()
+class AddPvrDialogFragment(val updateRecyclerView: PvrModificationListener):DialogFragment()
 {
 
 
@@ -55,22 +44,22 @@ class AddPvrDialogFragment(val updateRecyclerView: UpdateRecyclerView):DialogFra
 
             builder.setView(binding.root)
 
-            //obtenemos los valores de los campos
+            //setup
             val address = binding.etAddress
             val pvrName = binding.etPvrName
             val phone = binding.etTelephone
             val nameSurname = binding.etNameAndSurname
             val authDate = binding.etAuthDate
             val viewParentfragment: View? = parentFragment?.requireView()
-
+            val calendar: Calendar = Calendar.getInstance()
 
 
             val model: AddPvrViewModel by viewModels()
-            val calendar: Calendar = Calendar.getInstance()
 
             authDate.setOnClickListener {
-                showDatePickerDialog(authDate, calendar!!)
+                showDatePickerDialog(authDate, calendar)
             }
+
 
 
             builder.setPositiveButton(

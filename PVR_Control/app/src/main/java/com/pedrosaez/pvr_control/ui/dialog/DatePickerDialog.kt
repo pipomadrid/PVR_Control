@@ -14,13 +14,13 @@ class DatePickerFragment  : DialogFragment(){
     private var listener: DatePickerDialog.OnDateSetListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Use the current date as the default date in the picker
+        // preselecciona la fecha actual el en datepicker
         val c: Calendar = Calendar.getInstance()
         val year: Int = c.get(Calendar.YEAR)
         val month: Int = c.get(Calendar.MONTH)
         val day: Int = c.get(Calendar.DAY_OF_MONTH)
 
-        // Create a new instance of DatePickerDialog and return it
+        // crea isntancia de datecpicker y la devuelve
         return DatePickerDialog(requireActivity(), listener, year, month, day)
     }
 

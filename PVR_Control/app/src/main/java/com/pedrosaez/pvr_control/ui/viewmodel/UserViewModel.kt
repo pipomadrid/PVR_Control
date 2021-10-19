@@ -16,7 +16,7 @@ class UserViewModel: ViewModel() {
         val data = MutableLiveData<Exception>()
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
-                    if (it.isSuccessful()) {
+                    if (it.isSuccessful) {
                         data.value = it.exception
                     } else {
                         data.value = it.exception

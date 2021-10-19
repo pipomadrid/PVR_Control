@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pedrosaez.pvr_control.application.App
-import com.pedrosaez.pvr_control.data.entities.DatosPvr
+import com.pedrosaez.pvr_control.database.entities.DatosPvr
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -1,7 +1,7 @@
 package com.pedrosaez.pvr_control.application
 
 import android.app.Application
-import com.pedrosaez.pvr_control.data.AppDatabase
+import com.pedrosaez.pvr_control.database.AppDatabase
 
 class App :Application(){
 

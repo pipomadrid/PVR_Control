@@ -1,4 +1,4 @@
-package com.pedrosaez.pvr_control.ui.view
+package com.pedrosaez.pvr_control.ui.view.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

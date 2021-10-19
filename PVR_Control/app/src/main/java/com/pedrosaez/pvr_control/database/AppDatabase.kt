@@ -1,10 +1,10 @@
-package com.pedrosaez.pvr_control.data
+package com.pedrosaez.pvr_control.database
 
 import android.content.Context
 import androidx.room.*
-import com.pedrosaez.pvr_control.data.converters.Converters
-import com.pedrosaez.pvr_control.data.dao.DatosPvrDao
-import com.pedrosaez.pvr_control.data.entities.DatosPvr
+import com.pedrosaez.pvr_control.database.converters.Converters
+import com.pedrosaez.pvr_control.database.dao.DatosPvrDao
+import com.pedrosaez.pvr_control.database.entities.DatosPvr
 
 @Database(entities = arrayOf(DatosPvr::class),version = 1)
 @TypeConverters(Converters::class)

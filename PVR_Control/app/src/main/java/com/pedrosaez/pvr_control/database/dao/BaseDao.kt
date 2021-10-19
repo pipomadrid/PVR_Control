@@ -1,9 +1,9 @@
-package com.pedrosaez.pvr_control.data.dao
+package com.pedrosaez.pvr_control.database.dao
 
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Update
-import com.pedrosaez.pvr_control.data.entities.BaseEntity
+import com.pedrosaez.pvr_control.database.entities.BaseEntity
 import java.util.*
 
 

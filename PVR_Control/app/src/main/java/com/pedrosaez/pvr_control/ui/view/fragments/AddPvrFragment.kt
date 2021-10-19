@@ -1,4 +1,4 @@
-package com.pedrosaez.pvr_control.ui.view
+package com.pedrosaez.pvr_control.ui.view.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,14 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.application.App
-import com.pedrosaez.pvr_control.data.entities.DatosPvr
+import com.pedrosaez.pvr_control.database.entities.DatosPvr
 import com.pedrosaez.pvr_control.databinding.FragmentAddPvrBinding
 import com.pedrosaez.pvr_control.ui.adapter.PvrAdapter
 import com.pedrosaez.pvr_control.ui.dialog.AddPvrDialogFragment
+import com.pedrosaez.pvr_control.ui.listeners.PvrModificationListener
 import com.pedrosaez.pvr_control.ui.viewmodel.AddPvrViewModel
 
 
-class AddPvrFragment : Fragment(),UpdateRecyclerView {
+class AddPvrFragment : Fragment(), PvrModificationListener {
 
 
     // variables para crear el binding en los fragment

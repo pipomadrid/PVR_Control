@@ -1,6 +1,5 @@
-package com.pedrosaez.pvr_control.data.converters
+package com.pedrosaez.pvr_control.database.converters
 
-import androidx.annotation.Nullable
 import androidx.room.TypeConverter
 import java.util.*
 

@@ -1,4 +1,4 @@
-package com.pedrosaez.pvr_control.data.entities
+package com.pedrosaez.pvr_control.database.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey

@@ -1,14 +1,12 @@
-package com.pedrosaez.pvr_control.ui.view
+package com.pedrosaez.pvr_control.ui.view.fragments
 
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -18,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.databinding.FragmentLoginBinding
+import com.pedrosaez.pvr_control.ui.view.HomeActivity
 import com.pedrosaez.pvr_control.ui.viewmodel.UserViewModel
 
 

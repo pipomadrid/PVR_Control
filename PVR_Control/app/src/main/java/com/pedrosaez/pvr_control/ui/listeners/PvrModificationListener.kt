@@ -1,10 +1,9 @@
-package com.pedrosaez.pvr_control.ui.view
+package com.pedrosaez.pvr_control.ui.listeners
 
-import android.view.View
-import com.pedrosaez.pvr_control.data.entities.DatosPvr
+import com.pedrosaez.pvr_control.database.entities.DatosPvr
 
 //Interfaz para borrar registro del pvr de  la base de datos
-interface UpdateRecyclerView {
+interface  PvrModificationListener{
 
     fun delete(pvr:DatosPvr)
 

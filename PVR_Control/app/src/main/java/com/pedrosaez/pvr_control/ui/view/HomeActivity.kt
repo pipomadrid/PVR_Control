@@ -9,7 +9,6 @@ import android.view.MenuItem
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.pedrosaez.pvr_control.R
-import com.pedrosaez.pvr_control.data.AppDatabase
 import com.pedrosaez.pvr_control.databinding.ActivityHomeBinding
 import com.pedrosaez.pvr_control.ui.adapter.ViewPagerAdapter
 
