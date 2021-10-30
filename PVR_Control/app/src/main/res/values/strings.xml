@@ -23,9 +23,18 @@
     <string name="app_title">PVR Control</string>
     <string name="auth_date">Fecha inicio autorización</string>
     <string name="fields_cant_be_empty">Los campos nombre y datos del titular no pueden estar vacíos</string>
-    <string name="no_data_found_to_update_pvr">No se encontraron datos para actualizar Pvr</string>
+    <string name="no_data_found_to_update">No se encontraron datos para actualizar </string>
     <string name="close_session">Cerrar Sesión</string>
     <string name="field_empty">El campo no puede estar vacío</string>
     <string name="password_too_short">La contraseña es demasiado corta</string>
     <string name="password_must_match">Las contraseñas deben coincidir</string>
+    <string name="rails_numbers">Nº Carriles:</string>
+    <string name="serial_number">Numero de serie:</string>
+    <string name="model">Modelo:</string>
+    <string name="brand">Marca:</string>
+    <string name="brand_hint">Marca</string>
+    <string name="model_hint">Modelo</string>
+    <string name="serial_number_hint">Nº de serie</string>
+    <string name="rails_number_hint">Nº de carriles</string>
+    <string name="must_fill_fields">Debes rellenar todos los campos</string>
 </resources>

@@ -12,15 +12,15 @@ abstract class BaseDao<T> where T:BaseEntity{
 
 
     @Delete
-    abstract fun delete(t: T)
+    abstract suspend fun delete(t: T)
 
     @Insert
-    abstract fun save(t: T)
+    abstract suspend fun save(t: T)
 
     @Update
-    protected abstract fun updateProtect(t: T)
+    protected abstract suspend fun updateProtect(t: T)
 
-    fun update(t: T) {
+    suspend fun update(t: T) {
         t.updateAt = Date(System.currentTimeMillis())
         updateProtect(t)
     }

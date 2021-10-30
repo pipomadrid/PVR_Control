@@ -3,17 +3,12 @@ package com.pedrosaez.pvr_control.ui.dialog
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 
 import android.os.Bundle
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
@@ -26,7 +21,7 @@ import java.util.*
 
 
 // Creamos un dialogo que nos va a servir para introducir los datos del PVR desde el homeFragment
-class AddPvrDialogFragment(val updateRecyclerView: PvrModificationListener):DialogFragment()
+class AddPvrDialogFragment(val updateRecyclerViewListener: PvrModificationListener):DialogFragment()
 {
 
 
@@ -84,7 +79,7 @@ class AddPvrDialogFragment(val updateRecyclerView: PvrModificationListener):Dial
                         if (tag == "AddDialog") {
                             if (nameSurname.text.toString().isNotEmpty() && pvrName.text.toString().isNotEmpty()) {
 
-                                updateRecyclerView.create(pvr)
+                                updateRecyclerViewListener.create(pvr)
 
                             } else {
                                 // Al crear un nuevo Pvr nos aseguramos de que los campos nombre y datos del titular no esten vacios
@@ -95,7 +90,7 @@ class AddPvrDialogFragment(val updateRecyclerView: PvrModificationListener):Dial
 
                         } else {
                             //Cuando el tag es actualizar  llamamos al metodo update
-                            updateRecyclerView.update(pvr)
+                            updateRecyclerViewListener.update(pvr)
                         }
 
 

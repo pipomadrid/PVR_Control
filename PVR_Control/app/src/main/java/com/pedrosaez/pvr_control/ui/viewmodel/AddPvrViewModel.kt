@@ -1,24 +1,31 @@
 package com.pedrosaez.pvr_control.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.pedrosaez.pvr_control.application.App
 import com.pedrosaez.pvr_control.database.entities.DatosPvr
+import com.pedrosaez.pvr_control.repository.PvrRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AddPvrViewModel:ViewModel() {
 
-    private val db = App.obtenerDatabase()
+    private val repository :PvrRepository
+    val getAll_Pvr : LiveData<List<DatosPvr>>
+
+    init{
+         val db = App.obtenerDatabase().datosPvrDao()
+        repository = PvrRepository(db)
+        getAll_Pvr = repository.getAllPvr().asLiveData()
+    }
+
+
 
 
     fun save(pvr: DatosPvr) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                db.datosPvrDao().save(pvr)
+                repository.insertPvr(pvr)
             }
         }
 
@@ -27,7 +34,7 @@ class AddPvrViewModel:ViewModel() {
     fun update(pvr: DatosPvr) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                db.datosPvrDao().update(pvr)
+               repository.updatePvr(pvr)
             }
         }
 
@@ -35,14 +42,14 @@ class AddPvrViewModel:ViewModel() {
     fun delete(pvr: DatosPvr) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                db.datosPvrDao().delete(pvr)
+                repository.deletePvr(pvr)
             }
         }
 
     }
 
 
-    val _pvr_list: MutableLiveData<List<DatosPvr>> by lazy {
+    /*val _pvr_list: MutableLiveData<List<DatosPvr>> by lazy {
         // also --> Quiero hacer algo más, en este caso introducir datos
         MutableLiveData<List<DatosPvr>>().also {
             loadDatosPvr()
@@ -63,7 +70,7 @@ class AddPvrViewModel:ViewModel() {
 
         }
 
-    }
+    }*/
 
 
 }

@@ -24,7 +24,6 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
 
 
     // variables para crear el binding en los fragment
-    private lateinit var updatedPvr:DatosPvr
     private lateinit var actualPvr:DatosPvr
     private var _binding: FragmentAddPvrBinding? = null
     private val binding get() = _binding!!
@@ -34,7 +33,7 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         val db = App.obtenerDatabase()
         _binding = FragmentAddPvrBinding.inflate(layoutInflater)
@@ -42,9 +41,10 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
 
         val addDialog: AddPvrDialogFragment = AddPvrDialogFragment(this)
 
-        model.getPvr().observe(viewLifecycleOwner, { //--> RECIBO NOTIFICACIÓN DE DATOS NUEVOS
-            createRecyclerView(it)
 
+
+        model.getAll_Pvr.observe(viewLifecycleOwner, { //--> RECIBO NOTIFICACIÓN DE DATOS NUEVOS
+            createRecyclerView(it)
         })
 
 
@@ -54,18 +54,6 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
             addDialog.show(childFragmentManager, "AddDialog")
         }
 
-        //cerramos sesion y volvemos al login borrando las sharepreferences
-        /* binding.btSesion.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            val prefs= requireContext().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-            val prefsEdit = prefs.edit()
-            prefsEdit.clear()
-            prefsEdit.apply()
-            requireActivity().onBackPressed()
-        }*/
-
-
-        //Todo poner en menu boton de cerrar sesion
 
         return binding.root
 
@@ -134,7 +122,7 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
             mAdapterProductos.updatePvr(actualPvr)
 
         }else {
-            Snackbar.make(requireView(), getString(R.string.no_data_found_to_update_pvr), Snackbar.LENGTH_LONG)
+            Snackbar.make(requireView(), getString(R.string.no_data_found_to_update), Snackbar.LENGTH_LONG)
                     .setAnchorView(R.id.bt_new_pvr)//mostramos en snackbar encima del floating button
                     .show()
         }

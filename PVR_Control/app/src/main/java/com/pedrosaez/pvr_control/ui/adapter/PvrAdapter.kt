@@ -1,8 +1,10 @@
 package com.pedrosaez.pvr_control.ui.adapter
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.database.entities.DatosPvr
 import com.pedrosaez.pvr_control.ui.dialog.AddPvrDialogFragment
 import com.pedrosaez.pvr_control.ui.listeners.PvrModificationListener
+import com.pedrosaez.pvr_control.ui.view.PvrInfoActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,10 +32,10 @@ class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val u
         val pvrName: TextView = view.findViewById(R.id.tv_pvr_name)
         val nameSurname: TextView = view.findViewById(R.id.tv_name_surname)
         val address: TextView = view.findViewById(R.id.tv_address)
-        val expirationDate: TextView = view.findViewById(R.id.tv_date_expiration)
+        val expirationDate: TextView = view.findViewById(R.id.tv_rails_numbers)
         val phone : TextView = view.findViewById(R.id.tv_phone)
-        val delete_button : ImageButton = view.findViewById(R.id.bt_delete)
-        val edit_button : ImageButton = view.findViewById(R.id.bt_edit)
+        val deleteButton : ImageButton = view.findViewById(R.id.bt_delete)
+        val editButton : ImageButton = view.findViewById(R.id.bt_edit)
 
 
     }
@@ -50,7 +53,8 @@ class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val u
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = pvr_list[position]
         bind(holder, item)
-        holder.delete_button.setOnClickListener {
+
+        holder.deleteButton.setOnClickListener {
 
             //Creamos un alert dialog para confirmar la eliminacion
             val builder = AlertDialog.Builder(context)
@@ -68,14 +72,28 @@ class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val u
             builder.show()
         }
 
-        holder.edit_button.setOnClickListener {
-            val actualPvr = pvr_list[position]
-            updateRecyclerView.sendActualPvr(actualPvr)
+        holder.editButton.setOnClickListener {
+            updateRecyclerView.sendActualPvr(item)
             val updateDialog= AddPvrDialogFragment(updateRecyclerView)
             val manager= (context as AppCompatActivity).supportFragmentManager
             updateDialog.show(manager, "updateDialog")
 
         }
+        holder.view.setOnClickListener {
+
+            context as Activity
+            //Uso las sharedPreferences para pasar el id y el nombre del Pvr para poder gestionar los datos del mismo
+            val prefs = context.getSharedPreferences((context.getString(R.string.prefs_file)),Context.MODE_PRIVATE)
+            with(prefs.edit()){
+                putLong("pvrId",item.id)
+                putString("pvrName",item.pvrName)
+                apply()
+            }
+            val context = it.context
+            val intent = Intent(context,PvrInfoActivity::class.java)
+            context.startActivity(intent)
+        }
+
     }
 
 
@@ -103,6 +121,7 @@ class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val u
 
 
         var authExpirationDate:String = " "
+
 
         if (pvr.authDate != null) {
             var calendar = Calendar.getInstance()

@@ -133,7 +133,7 @@
             android:layout_marginBottom="8dp"/>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_date_expiration"
+            android:id="@+id/tv_rails_numbers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"

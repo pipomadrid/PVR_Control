@@ -9,53 +9,61 @@ import android.view.MenuItem
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.pedrosaez.pvr_control.R
-import com.pedrosaez.pvr_control.databinding.ActivityHomeBinding
+import com.pedrosaez.pvr_control.database.entities.DatosPvr
+import com.pedrosaez.pvr_control.databinding.ActivityPvrInfoBinding
 import com.pedrosaez.pvr_control.ui.adapter.HomeViewPagerAdapter
+import com.pedrosaez.pvr_control.ui.adapter.PvrInfoViewPagerAdapter
+import com.pedrosaez.pvr_control.ui.dialog.AddMachineDialog
+import com.pedrosaez.pvr_control.ui.view.fragments.MachineFragment
+import java.io.Serializable
 
-class HomeActivity : AppCompatActivity() {
+class PvrInfoActivity : AppCompatActivity() {
 
-    private lateinit var binding:ActivityHomeBinding
+    private lateinit var binding:ActivityPvrInfoBinding
+    private lateinit var pvr:Serializable
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHomeBinding.inflate(layoutInflater)
+        binding = ActivityPvrInfoBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
         title = "PVR Control"
 
         //setup
-        val pagerAdapter = HomeViewPagerAdapter(this)
-        val viewPager = binding.pager
-        val tab_layout= binding.tabLayout
+        val pagerAdapter = PvrInfoViewPagerAdapter(this)
+        val viewPager = binding.pagerPvrInfo
+        val tabLayout= binding.tabLayoutPvrInfo
         viewPager.adapter = pagerAdapter
+
 
 
 
         // Vinculamos el Tablayout al viewPager
         val tabLayoutMediator = TabLayoutMediator(
-            tab_layout,
+            tabLayout,
             viewPager,
             TabLayoutMediator.TabConfigurationStrategy { tab, position ->
                 when (position) {
                     0 -> {
-                        tab.text = "Mis Pvr"
+                        tab.text = "Registros"
                     }
                     1-> {
-                        tab.text = "totales"
+                        tab.text = "Maquinas"
                     }
                 }
             })
         tabLayoutMediator.attach()
 
     }
-    // Incializa las opciones del menu
-    override fun onCreateOptionsMenu(menu:Menu): Boolean {
-        val inflater :MenuInflater = menuInflater
+    // Incializa las opciones del menu overflow
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater : MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_overflow,menu)
         return true
     }
 
     // Al pulsar sobre una accion del menu overFlow realizaremos las operaciones  correspondientes
-     override fun onOptionsItemSelected(item:MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.menu_close_session ->{
                 closeSession()
@@ -74,6 +82,10 @@ class HomeActivity : AppCompatActivity() {
         prefsEdit.clear()
         prefsEdit.apply()
         onBackPressed()
+    }
+
+    fun getPvr():Serializable{
+        return pvr
     }
 
 
