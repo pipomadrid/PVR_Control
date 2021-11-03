@@ -48,7 +48,13 @@ class PvrInfoActivity : AppCompatActivity() {
                         tab.text = "Registros"
                     }
                     1-> {
-                        tab.text = "Maquinas"
+                        tab.text = "Resúmen"
+                    }
+                    2-> {
+                        tab.text = "Gastos"
+                    }
+                    3-> {
+                        tab.text = "Máquinas "
                     }
                 }
             })

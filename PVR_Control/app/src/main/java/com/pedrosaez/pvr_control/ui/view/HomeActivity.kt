@@ -1,6 +1,7 @@
 package com.pedrosaez.pvr_control.ui.view
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -61,19 +62,30 @@ class HomeActivity : AppCompatActivity() {
                 closeSession()
                 true
             }
+            R.id.menu_get_out ->{
+                finishAffinity()
+                true
+            }
 
             else ->  super.onOptionsItemSelected(item)
         }
     }
 
-    // funcion para cerrar la sesión de firebase de la app y eliminar las sharedPreferences
+    // funcion para cerrar la sesión de firebase de la app eliminar las sharedPreferences y volver al login
     private fun closeSession() {
         FirebaseAuth.getInstance().signOut()
         val prefs= this.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val prefsEdit = prefs.edit()
         prefsEdit.clear()
         prefsEdit.apply()
-        onBackPressed()
+        val intent = Intent(this,MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    // anulamos la accion para que el usuario no pueda volver a atras desde el  boton
+    override fun  onBackPressed() {
+
+
     }
 
 

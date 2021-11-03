@@ -4,4 +4,7 @@
 
     <item android:title="@string/close_session"
         android:id="@+id/menu_close_session"/>
+
+    <item android:title="@string/get_out"
+        android:id="@+id/menu_get_out"/>
 </menu>

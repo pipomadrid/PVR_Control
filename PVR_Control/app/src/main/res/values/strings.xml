@@ -37,4 +37,19 @@
     <string name="serial_number_hint">Nº de serie</string>
     <string name="rails_number_hint">Nº de carriles</string>
     <string name="must_fill_fields">Debes rellenar todos los campos</string>
+    <string name="get_out">Salir</string>
+    <string name="total_sells">Introducir total ventas</string>
+    <string name="total_bills">Introduce total billetes</string>
+    <string name="total_coins">Introduce total monedas</string>
+    <string name="sales">Ventas:</string>
+    <string name="bills">Billetes:</string>
+    <string name="coins">Monedas:</string>
+    <string name="Parcials">Parciales</string>
+    <string name="parcial_gains">Parcial Ganancia:</string>
+    <string name="pvr_payment">Pago a Pvr:</string>
+    <string name="total_gains">Total Ganancia:</string>
+    <string name="total_pvr_payments">Total pagos a pvr:</string>
+    <string name="parcial_outgoins">Parcial Gastos:</string>
+    <string name="total_outgoins">Total gastos:</string>
+    <string name="last_record">Último Registro</string>
 </resources>

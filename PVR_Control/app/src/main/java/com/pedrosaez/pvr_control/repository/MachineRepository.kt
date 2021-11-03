@@ -12,7 +12,7 @@ import com.pedrosaez.pvr_control.database.entities.PvrMachine
 import kotlinx.coroutines.flow.Flow
 
 
-class MachineRepository(private val machineDao :MachineDao):Application(){
+class MachineRepository(private val machineDao :MachineDao){
 
 
 

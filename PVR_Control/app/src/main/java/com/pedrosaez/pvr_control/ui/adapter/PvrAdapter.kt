@@ -59,14 +59,14 @@ class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val u
             //Creamos un alert dialog para confirmar la eliminacion
             val builder = AlertDialog.Builder(context)
             builder.setMessage("¿Estas seguro de eliminar a este PVR?")
-                    .setPositiveButton("Eliminar",
-                            DialogInterface.OnClickListener { dialog, id ->
-                                updateRecyclerView.delete(item)
-                            })
-                    .setNegativeButton(("cancelar"),
-                            DialogInterface.OnClickListener { dialog, id ->
-                                dialog.cancel()
-                            })
+                .setPositiveButton("Eliminar",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        updateRecyclerView.delete(item)
+                    })
+                .setNegativeButton(("cancelar"),
+                    DialogInterface.OnClickListener { dialog, id ->
+                        dialog.cancel()
+                    })
             // Create the AlertDialog object and return it
             builder.create()
             builder.show()
@@ -97,20 +97,6 @@ class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val u
     }
 
 
-        /*     var calendar = Calendar.getInstance()
-             calendar.time=item.authDate
-             calendar.add(Calendar.YEAR,3)
-             val expirationDate = calendar.time
-
-
-             val dateFormated= SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-             val formatedDate = dateFormated.format(expirationDate)
-
-             holder.pvrName.text = item.pvrName
-             holder.nameSurname.text = item.nameSurname
-             holder.address.text = item.address
-             holder.expirationDate.text = formatedDate
-             holder.phone.text = item.phone.toString()*/
 
 
     override fun getItemCount()= pvr_list.size
@@ -149,7 +135,7 @@ class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val u
         notifyItemInserted(pvr_list.size)
     }
 
-     fun deletePvr(pvr: DatosPvr) {
+    fun deletePvr(pvr: DatosPvr) {
         val pos = pvr_list.indexOf(pvr)
         pvr_list.removeAt(pos)
         notifyItemRemoved(pos)

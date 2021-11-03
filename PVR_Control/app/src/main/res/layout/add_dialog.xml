@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.core.widget.NestedScrollView
+    android:id="@+id/add_dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    >
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilAuthDate"
+        android:id="@+id/til_auth_date"
         style="@style/TextInputLayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,10 +22,10 @@
         android:hint="@string/auth_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilRailsNumber">
+        app:layout_constraintTop_toBottomOf="@id/til_phone">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etAuthDate"
+            android:id="@+id/et_auth_date"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="date"
@@ -37,7 +38,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPvrName"
+        android:id="@+id/til_name_pvr"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -50,18 +51,18 @@
         style="@style/TextInputLayoutStyle">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPvrName"
+            android:id="@+id/et_name_pvr"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPersonName"
-            android:nextFocusDown="@id/etNameAndSurname"
+            android:nextFocusDown="@id/et_name_surname"
             android:imeOptions="actionNext"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilNameAndSurname"
+        android:id="@+id/til_name_surname"
         style="@style/TextInputLayoutStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -71,21 +72,21 @@
         android:hint="@string/name_surname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilPvrName"
+        app:layout_constraintTop_toBottomOf="@id/til_name_pvr"
         >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etNameAndSurname"
+            android:id="@+id/et_name_surname"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPersonName"
             android:imeOptions="actionNext"
-            android:nextFocusDown="@id/etAddress"/>
+            android:nextFocusDown="@id/et_address"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilAddress"
+        android:id="@+id/til_address"
         style="@style/TextInputLayoutStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -95,21 +96,21 @@
         android:hint="@string/address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilNameAndSurname">
+        app:layout_constraintTop_toBottomOf="@id/til_name_surname">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etAddress"
+            android:id="@+id/et_address"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPostalAddress"
             android:imeOptions="actionNext"
-            android:nextFocusDown="@id/etTelephone"
+            android:nextFocusDown="@id/et_phone"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRailsNumber"
+        android:id="@+id/til_phone"
         style="@style/TextInputLayoutStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -119,10 +120,10 @@
         android:hint="@string/phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilAddress">
+        app:layout_constraintTop_toBottomOf="@id/til_address">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etTelephone"
+            android:id="@+id/et_phone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="number"

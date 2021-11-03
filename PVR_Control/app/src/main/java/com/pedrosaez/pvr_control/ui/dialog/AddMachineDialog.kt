@@ -9,21 +9,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.database.entities.PvrMachine
 import com.pedrosaez.pvr_control.databinding.MachineDialogBinding
-import com.pedrosaez.pvr_control.ui.view.fragments.MachineFragment
+import com.pedrosaez.pvr_control.ui.viewmodel.MachineViewModel
 
 
 // Dialogo paraa introducir datos de la maquina expendedora
-class AddMachineDialog(val machineListener: MachineAddListener):DialogFragment() {
+class AddMachineDialog(val machineListener: MachineDialogListener):DialogFragment() {
 
 
     private var _binding: MachineDialogBinding?= null
     private val binding get() = _binding!!
 
     private lateinit var  pvrMachine : PvrMachine
+    private var _pvrId: Long? = null
+    private val model: MachineViewModel by activityViewModels()
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -38,7 +41,6 @@ class AddMachineDialog(val machineListener: MachineAddListener):DialogFragment()
             val modelMachine = binding.etModel
             val serialNumber = binding.etSerialNumber
             val railsNumber = binding.etRailsNumber
-
             val viewParentfragment: View? = parentFragment?.requireView()
             val addButton = binding.btAddRail
             val minusButton = binding.btMinusRail
@@ -60,36 +62,48 @@ class AddMachineDialog(val machineListener: MachineAddListener):DialogFragment()
                     railsNumber.setText(rails.toString())
                 }
             }
-            
-            builder.setPositiveButton("Guardar",
+
+            // obtenemos el Id del pvr
+            val prefs = requireActivity().getSharedPreferences((getString(R.string.prefs_file)), Context.MODE_PRIVATE)
+            _pvrId = prefs.getLong("pvrId", -1)
+
+            builder.setPositiveButton(
+                    if (tag == "addMachine") {
+                        "Guardar"
+                    } else "Actualizar",
                     DialogInterface.OnClickListener { dialog, id ->
+
                         //obtenemmos los datos introducidos en los edittext
                         val brandString = brand.text?.toString() ?: " "
                         val modelMachineString = modelMachine.text?.toString() ?: " "
                         val serialNumberString = serialNumber.text?.toString() ?: " "
                         val railsNumberInt = railsNumber.text.toString()
 
-                        val prefs = requireActivity().getSharedPreferences((getString(R.string.prefs_file)), Context.MODE_PRIVATE)
-                        val pvrId: Long = prefs.getLong("pvrId", -1)
-
-                        pvrMachine = PvrMachine(brandString, modelMachineString, serialNumberString, railsNumberInt.toInt(), pvrId)
+                        // Creamos una nueva maquina con los datos del Pvr
+                        pvrMachine = PvrMachine(brandString, modelMachineString, serialNumberString, railsNumberInt.toInt(), _pvrId!!)
 
 
-                        if ( tag =="addMachine") {
+                        if (tag == "addMachine") {
                             if (brandString.isNotEmpty() && modelMachineString.isNotEmpty() && serialNumberString.isNotEmpty() && railsNumberInt.isNotEmpty()) {
 
                                 machineListener.onPositiveClick()
-                                machineListener.saveMachine(pvrMachine)
+                                model.save(pvrMachine)
 
                             } else {
                                 Snackbar.make(viewParentfragment!!, getString(R.string.must_fill_fields), Snackbar.LENGTH_LONG)
                                         .setAnchorView(R.id.bt_new_machine)
                                         .show()
                             }
-                        }else { // si el tag es updateMachine
-                            machineListener.updateMachine(pvrMachine)
-                        }
+                        } else { // si el tag es updateMachine
+                            machineListener.onPositiveClick()
+                            if (!checkAndUpdateData(pvrMachine)) {
+                                Snackbar.make(viewParentfragment!!, getString(R.string.no_data_found_to_update), Snackbar.LENGTH_LONG)
+                                        .setAnchorView(R.id.bt_new_machine)//mostramos en snackbar encima del floating button
+                                        .show()
+                            }
 
+                        }
+                        //Si todos los campos están vacios se muestra el snackbar, si hay datos se actualiza el PVR con los mismos
 
 
                     })
@@ -102,15 +116,54 @@ class AddMachineDialog(val machineListener: MachineAddListener):DialogFragment()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-    interface MachineAddListener {
+
+    fun checkAndUpdateData (updateMachine :PvrMachine):Boolean{
+
+        val machineAndPvrs: List<PvrMachine>? = model.getMachine.value
+        var actualMachine:PvrMachine?=null
+
+        if (machineAndPvrs != null) {
+            for (i in machineAndPvrs) {
+
+                if (i.pvrId == _pvrId) {
+                    actualMachine = i
+                }
+            }
+        }
+        var updateSomeField = false
+
+        //comprobamos los campos que se van a actualizar
+        if (updateMachine.brand.isNotEmpty()) {
+            actualMachine!!.brand = updateMachine.brand
+            updateSomeField = true
+        }
+        if (updateMachine.model.isNotEmpty()) {
+            actualMachine!!.model = updateMachine.model
+            updateSomeField = true
+        }
+        if (updateMachine.serialNumber.isNotEmpty()) {
+            actualMachine!!.serialNumber = updateMachine.serialNumber
+            updateSomeField = true
+        }
+        if (updateMachine.railsNumber !=0) {
+            actualMachine!!.railsNumber = updateMachine.railsNumber
+            updateSomeField = true
+        }
+        if (updateSomeField) {
+            model.update(actualMachine!!)
+
+        }
+
+
+        return updateSomeField
+    }
+
+    interface MachineDialogListener {
 
         fun onPositiveClick()
 
-        fun saveMachine(machine:PvrMachine)
-
-        fun updateMachine(machine: PvrMachine)
-
-
     }
+
+
 
 }

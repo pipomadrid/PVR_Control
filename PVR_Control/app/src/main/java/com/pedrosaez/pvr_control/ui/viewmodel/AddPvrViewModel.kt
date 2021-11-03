@@ -20,8 +20,6 @@ class AddPvrViewModel:ViewModel() {
     }
 
 
-
-
     fun save(pvr: DatosPvr) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -49,28 +47,6 @@ class AddPvrViewModel:ViewModel() {
     }
 
 
-    /*val _pvr_list: MutableLiveData<List<DatosPvr>> by lazy {
-        // also --> Quiero hacer algo más, en este caso introducir datos
-        MutableLiveData<List<DatosPvr>>().also {
-            loadDatosPvr()
-        }
-    }
-
-    fun getPvr():LiveData<List<DatosPvr>> {
-        return _pvr_list
-    }
-
-    private fun loadDatosPvr() {
-        //SIMULANDO LA CONEXIÓN A LA BD
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) { //CONTEXTO DE ENTRADA Y SALIDA
-                var pvr_list = db.datosPvrDao().findAll()
-                _pvr_list.postValue(pvr_list)  //MAIN THREAD
-            }
-
-        }
-
-    }*/
 
 
 }

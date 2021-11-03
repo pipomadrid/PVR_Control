@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+// usamos un viewmodel compartido para poder guardar datos desde eel fragment y el dialogo
 class MachineViewModel:ViewModel() {
 
 
@@ -24,20 +25,6 @@ class MachineViewModel:ViewModel() {
         getMachine = repository.getMachines().asLiveData()
     }
 
-
-
-    // obtenemos los datos de la maquina en un livedata pra observar los cambios
- /*   fun getMachine(pvrId:Long) :LiveData<PvrMachine>{
-        val liveData = MutableLiveData<PvrMachine>()
-        viewModelScope.launch {
-           val machine = withContext(Dispatchers.IO) {
-                 repository.getMachineFromPvr(pvrId)
-              }
-            liveData.postValue(machine)
-            }
-        return liveData
-        }
-*/
 
     fun save (pvrMachine:PvrMachine){
         viewModelScope.launch {

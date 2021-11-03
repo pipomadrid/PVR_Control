@@ -7,6 +7,8 @@
     android:clickable="true"
     app:cardBackgroundColor="#245481"
     app:cardCornerRadius="20dp"
+    app:strokeWidth="3dp"
+    app:strokeColor="@color/secondaryColor"
     app:cardElevation="10dp"
     android:layout_margin="5dp"
     app:cardUseCompatPadding="true"

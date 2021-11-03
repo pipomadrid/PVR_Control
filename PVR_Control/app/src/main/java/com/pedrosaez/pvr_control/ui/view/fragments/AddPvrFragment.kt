@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -123,8 +124,8 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
 
         }else {
             Snackbar.make(requireView(), getString(R.string.no_data_found_to_update), Snackbar.LENGTH_LONG)
-                    .setAnchorView(R.id.bt_new_pvr)//mostramos en snackbar encima del floating button
-                    .show()
+                .setAnchorView(R.id.bt_new_pvr)//mostramos en snackbar encima del floating button
+                .show()
         }
 
     }

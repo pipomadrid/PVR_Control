@@ -4,19 +4,16 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.DialogInterface
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.database.entities.DatosPvr
 import com.pedrosaez.pvr_control.databinding.AddDialogBinding
 import com.pedrosaez.pvr_control.ui.listeners.PvrModificationListener
-import com.pedrosaez.pvr_control.ui.viewmodel.AddPvrViewModel
 import java.util.*
 
 
@@ -34,22 +31,20 @@ class AddPvrDialogFragment(val updateRecyclerViewListener: PvrModificationListen
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-           _binding = AddDialogBinding.inflate(LayoutInflater.from(it))
+            _binding = AddDialogBinding.inflate(LayoutInflater.from(it))
             val builder = AlertDialog.Builder(it)
 
             builder.setView(binding.root)
 
             //setup
             val address = binding.etAddress
-            val pvrName = binding.etPvrName
-            val phone = binding.etTelephone
-            val nameSurname = binding.etNameAndSurname
+            val pvrName = binding.etNamePvr
+            val phone = binding.etPhone
+            val nameSurname = binding.etNameSurname
             val authDate = binding.etAuthDate
             val viewParentfragment: View? = parentFragment?.requireView()
             val calendar: Calendar = Calendar.getInstance()
 
-
-            val model: AddPvrViewModel by viewModels()
 
             authDate.setOnClickListener {
                 showDatePickerDialog(authDate, calendar)
@@ -59,46 +54,46 @@ class AddPvrDialogFragment(val updateRecyclerViewListener: PvrModificationListen
 
             builder.setPositiveButton(
 
+                if (tag == "AddDialog") {
+                    "Guardar"
+                } else "Actualizar",
+
+                DialogInterface.OnClickListener { dialog, id ->
+
+                    //tomamos los valores de los editText y los asignamos
+                    val addressPvr = address.text?.toString() ?: " "
+                    val phonePvr = phone.text?.toString() ?: " "
+                    var calendarPvr: Date? = calendar.time
+                    val authDateString = binding.etAuthDate.text.toString()
+                    if (authDateString.isEmpty()) {
+                        calendarPvr = null
+                    }
+                    // creamos un nuevo Pvr con los datos introducidos en el Dialog para crear o actualizar según el caso
+                    pvr = DatosPvr(pvrName.text.toString(), nameSurname.text.toString(), addressPvr, phonePvr, calendarPvr)
+
                     if (tag == "AddDialog") {
-                        "Guardar"
-                    } else "Actualizar",
+                        if (nameSurname.text.toString().isNotEmpty() && pvrName.text.toString().isNotEmpty()) {
 
-                    DialogInterface.OnClickListener { dialog, id ->
-
-                        //tomamos los valores de los editText y los asignamos
-                        val addressPvr = address.text?.toString() ?: " "
-                        val phonePvr = phone.text?.toString() ?: " "
-                        var calendarPvr: Date? = calendar.time
-                        val authDateString = binding.etAuthDate.text.toString()
-                        if (authDateString.isEmpty()) {
-                            calendarPvr = null
-                        }
-                        // creamos un nuevo Pvr con los datos introducidos en el Dialog para crear o actualizar según el caso
-                        pvr = DatosPvr(pvrName.text.toString(), nameSurname.text.toString(), addressPvr, phonePvr, calendarPvr)
-
-                        if (tag == "AddDialog") {
-                            if (nameSurname.text.toString().isNotEmpty() && pvrName.text.toString().isNotEmpty()) {
-
-                                updateRecyclerViewListener.create(pvr)
-
-                            } else {
-                                // Al crear un nuevo Pvr nos aseguramos de que los campos nombre y datos del titular no esten vacios
-                                Snackbar.make(viewParentfragment!!, getString(R.string.fields_cant_be_empty), Snackbar.LENGTH_LONG)
-                                        .setAnchorView(R.id.bt_new_pvr)
-                                        .show()
-                            }
+                            updateRecyclerViewListener.create(pvr)
 
                         } else {
-                            //Cuando el tag es actualizar  llamamos al metodo update
-                            updateRecyclerViewListener.update(pvr)
+                            // Al crear un nuevo Pvr nos aseguramos de que los campos nombre y datos del titular no esten vacios
+                            Snackbar.make(viewParentfragment!!, getString(R.string.fields_cant_be_empty), Snackbar.LENGTH_LONG)
+                                .setAnchorView(R.id.bt_new_pvr)
+                                .show()
                         }
 
+                    } else {
+                        //Cuando el tag es actualizar  llamamos al metodo update
+                        updateRecyclerViewListener.update(pvr)
+                    }
 
-                    })
+
+                })
             builder.setNegativeButton("Cancelar",
-                            DialogInterface.OnClickListener { dialog, id ->
-                                getDialog()?.cancel()
-                            })
+                DialogInterface.OnClickListener { dialog, id ->
+                    getDialog()?.cancel()
+                })
             builder.create()
 
         } ?: throw IllegalStateException("Activity cannot be null")
