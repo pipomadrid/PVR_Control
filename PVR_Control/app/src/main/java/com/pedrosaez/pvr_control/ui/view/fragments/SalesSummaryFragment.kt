@@ -1,7 +1,6 @@
 package com.pedrosaez.pvr_control.ui.view.fragments
 
 import android.content.Context
-import android.icu.text.AlphabeticIndex
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,21 +8,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.pedrosaez.pvr_control.R
-import com.pedrosaez.pvr_control.database.entities.Records
+import com.pedrosaez.pvr_control.database.entities.ParcialRecords
+import com.pedrosaez.pvr_control.database.entities.TotalRecords
 import com.pedrosaez.pvr_control.databinding.FragmentSalesSummaryBinding
-import com.pedrosaez.pvr_control.ui.viewmodel.RecordViewModel
-import kotlin.math.absoluteValue
+import com.pedrosaez.pvr_control.ui.viewmodel.ParcialRecordViewModel
+import com.pedrosaez.pvr_control.ui.viewmodel.TotalRecordViewModel
+import java.text.DecimalFormat
+
+const val PVR_COMISION = 0.15
+const val USER_COMISION =0.085
 
 class SalesSummaryFragment : Fragment() {
 
 
 
-    private var lastRecord: Records? = null
-    private var parcialFirstRecord : Records? = null
-    private var totalFirstRecord : Records? = null
+    private var parcialLastRecord: ParcialRecords? = null
+    private var parcialFirstRecord : ParcialRecords? = null
+    private var totalFirstRecord : TotalRecords? = null
     private var _binding: FragmentSalesSummaryBinding? = null
     private val binding get() = _binding!!
-    private val model: RecordViewModel by activityViewModels()
+    private val modelParcial: ParcialRecordViewModel by activityViewModels()
+    private val modelTotal: TotalRecordViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -48,62 +53,78 @@ class SalesSummaryFragment : Fragment() {
 
 
 
-        var parcialSalesInt: Int
-        var parcialBillInt = 0
-        var parcialCoinsInt = 0
+        var parcialSalesLong: Long
+        var parcialBillLong = 0L
+        var parcialCoinsLong = 0L
+        var parcialMoneyLong = 0L
         var parcialPaymentDouble: Double
+        var parcialGainDouble:Double
         var totalGainInt :Double
-        var totalPaymentPvrInt:Int
-        
+        var totalPaymentPvrInt:Long
 
 
 
-        model.getParcialRecords.observe(viewLifecycleOwner, { recordList ->
+
+        modelParcial.getParcialRecords.observe(viewLifecycleOwner, { recordList ->
 
 
             for (i in recordList) {
                 if (recordList != null) {
+                    // obtenemos la lista de parciales con el id del pvr
                     if (i.pvr.id == pvrId) {
-                        if (i.records.isNotEmpty()) {
-                            lastRecord = i.records.last()
-                            parcialFirstRecord = i.records.first()
-                            if (i.records.size > 1) {
-                                parcialSalesInt = lastRecord!!.sells - parcialFirstRecord!!.sells
-                                parcialBillInt = lastRecord!!.bills - parcialFirstRecord!!.bills
-                                parcialCoinsInt = lastRecord!!.coins - parcialFirstRecord!!.coins
+                        //comprobamos que la lista tenga datos,si los tienes realizamos operaciones
+                        if (i.parcialRecords.isNotEmpty()) {
+                            parcialLastRecord = i.parcialRecords.last()
+                            parcialFirstRecord = i.parcialRecords.first()
+                            // si la lista es mayor a 1 realizamos los cálculos entre los registros
+                            // ultimo y primero
+                            if (i.parcialRecords.size > 1) {
+                                parcialSalesLong = parcialLastRecord!!.sells - parcialFirstRecord!!.sells
+                                parcialBillLong = parcialLastRecord!!.bills - parcialFirstRecord!!.bills
+                                parcialCoinsLong = parcialLastRecord!!.coins - parcialFirstRecord!!.coins
+                                parcialMoneyLong = parcialLastRecord!!.money - parcialFirstRecord!!.money
                             } else {
-                                parcialSalesInt = 0
-                                parcialBillInt = 0
-                                parcialCoinsInt = 0
+                                //si la lista solo tiene un registro
+                                parcialSalesLong = 0
+                                parcialBillLong = 0
+                                parcialCoinsLong = 0
+                                parcialMoneyLong = 0
                             }
-                            parcialPaymentDouble = parcialSalesInt * 0.15
-                            parcialSales.text = (parcialSalesInt).toString()
-                            parcialBills.text = (parcialBillInt).toString()
-                            parcialCoins.text = (parcialCoinsInt).toString()
-                            parcialPaymentsPvr.text = parcialPaymentDouble.toString()
+                            parcialPaymentDouble = parcialSalesLong * PVR_COMISION
+                            parcialGainDouble =  parcialMoneyLong * USER_COMISION
+                            parcialSales.text = (parcialSalesLong).toString()
+                            parcialBills.text = (parcialBillLong).toString()
+                            parcialCoins.text = (parcialCoinsLong).toString()
+                            parcialPaymentsPvr.text = String.format("%.2f",parcialPaymentDouble)
+                            parcialGain.text = String.format("%.2f",parcialGainDouble)
 
                         } else {
                             parcialSales.text = ""
                             parcialBills.text = ""
                             parcialCoins.text = ""
                         }
-
                     }
-                } else {
-
-
                 }
             }
 
             btRestartParcial.setOnClickListener {
                 for (i in recordList) {
                     if (recordList != null) {
+                        // obtenemos la lista de parciales con el id del pvr
                         if (i.pvr.id == pvrId) {
-                            for (x in i.records) {
+                            // por cada registro  del pvr borramos todos menos el último
+                            for (x in i.parcialRecords) {
+                                if(x != i.parcialRecords.last()){
+                                    modelParcial.deleteParcial(x)
+                                }
                             }
                         }
                     }
                 }
+                parcialSales.text = ""
+                parcialBills.text = ""
+                parcialCoins.text = ""
+
 
             }
 

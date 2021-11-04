@@ -5,12 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-
+    <TextView
+        android:id="@+id/help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="16sp"
+        android:text="@string/help_add_register"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="220dp"
             android:layout_margin="5dp"
             app:cardBackgroundColor="@color/secondaryColor"
             app:cardCornerRadius="20dp"
@@ -67,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="12dp"
                     android:text="@string/sales"
                     android:textColor="@color/primaryTextColor"
@@ -81,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/primaryTextColor"
                     app:layout_constraintStart_toEndOf="@id/label_brand"
                     app:layout_constraintTop_toBottomOf="@id/tv_sales_label"
@@ -134,6 +144,28 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_bills_label"
                     tools:text="r344rsf" />
 
+                <TextView
+                    android:id="@+id/tv_money_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/sales_money"
+                    android:textColor="@color/primaryTextColor"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_coins" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/primaryTextColor"
+                    app:layout_constraintStart_toEndOf="@id/tv_money_label"
+                    app:layout_constraintTop_toBottomOf="@id/tv_coins_label"
+                    tools:text="r344rsf" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

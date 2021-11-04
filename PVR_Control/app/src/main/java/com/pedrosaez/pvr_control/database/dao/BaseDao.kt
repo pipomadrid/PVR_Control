@@ -2,6 +2,7 @@ package com.pedrosaez.pvr_control.database.dao
 
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Update
 import com.pedrosaez.pvr_control.database.entities.BaseEntity
 import java.util.*
@@ -14,7 +15,7 @@ abstract class BaseDao<T> where T:BaseEntity{
     @Delete
     abstract suspend fun delete(t: T)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun save(t: T)
 
     @Update
