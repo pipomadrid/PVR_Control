@@ -51,8 +51,15 @@ class OutGoinsFragment : Fragment(),OutGoingModificationListener{
 
 
         //obtenemos la lista de gastos desde la función del viewmodel y creamos el recyclerView
-        model.getOutGoinsOfPVr(pvrId).observe(viewLifecycleOwner, { //--> RECIBO NOTIFICACIÓN DE DATOS NUEVOS
-            createRecyclerView(it)
+        model.getAllOutGoins.observe(viewLifecycleOwner, {pvrAndOutGoins->
+
+            for(pvrAndOut in pvrAndOutGoins) {
+                if (pvrAndOut.pvr.id == pvrId) {
+                        createRecyclerView(pvrAndOut.outGoins)
+                    }
+
+            }
+
 
         })
 
@@ -70,17 +77,22 @@ class OutGoinsFragment : Fragment(),OutGoingModificationListener{
 
 
     private fun createRecyclerView(outGoinList: List<OutGoins>) {
-
         //cambio el orden de la lista pra que muestre el ultimo gasto introducido
-        val outGoingreverseList = outGoinList.reversed()
 
-        mAdapterOutGoins = OutGoinsAdapter(requireContext(), outGoingreverseList as MutableList<OutGoins>,this)
+     /*   if (outGoinList.isNotEmpty()) {
+            val outGoingreverseList = outGoinList.reversed()*/
+
+          /*  mAdapterOutGoins = OutGoinsAdapter(requireContext(), outGoingreverseList as MutableList<OutGoins>, this)*/
+
+            mAdapterOutGoins = OutGoinsAdapter(requireContext(), outGoinList as MutableList<OutGoins>, this)
+
         val recyclerView = _binding!!.outGoinRecycler
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = mAdapterOutGoins
             addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
         }
+
 
     }
     override fun sendActualOutGoing(outGoins: OutGoins) {
@@ -89,7 +101,8 @@ class OutGoinsFragment : Fragment(),OutGoingModificationListener{
 
 
     override fun delete(outGoins: OutGoins) {
-      model.deleteOutGoin(outGoins)
+        model.deleteOutGoin(outGoins)
+        mAdapterOutGoins.deleteOutGoing(outGoins)
     }
 
     override fun update(outGoins: OutGoins) {

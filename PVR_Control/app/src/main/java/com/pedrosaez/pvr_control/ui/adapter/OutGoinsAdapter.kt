@@ -55,7 +55,7 @@ class OutGoinsAdapter(val context: Context, val outGoinsList: MutableList<OutGoi
 
             //Creamos un alert dialog para confirmar la eliminacion
             val builder = AlertDialog.Builder(context)
-            builder.setMessage("¿Estas seguro de eliminar a este PVR?")
+            builder.setMessage("¿Estas seguro de eliminar a este gasto?")
                     .setPositiveButton("Eliminar",
                             DialogInterface.OnClickListener { dialog, id ->
                                 outGoinListener.delete(item)
@@ -70,6 +70,7 @@ class OutGoinsAdapter(val context: Context, val outGoinsList: MutableList<OutGoi
         }
 
         holder.btEdit.setOnClickListener {
+            outGoinListener.sendActualOutGoing(item)
             val updateDialog = AddOutGoingDialog(outGoinListener)
             val manager = (context as AppCompatActivity).supportFragmentManager
             updateDialog.show(manager,"updateDialog")

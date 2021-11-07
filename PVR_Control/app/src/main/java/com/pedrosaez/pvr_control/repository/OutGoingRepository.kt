@@ -12,7 +12,7 @@ class OutGoingRepository(private val recordsDao: OutGoinDao) {
 
     fun getAllOutGoins(): Flow<List<PvrAndOutGoins>> = recordsDao.getPvrWithOutGoins()
 
-    fun getOutGoinsOfPVr(pvrId:Long): Flow<List<OutGoins>> = recordsDao.getOutgoinsOfPVr(pvrId)
+    fun getOutGoinsOfPVr(pvrId:Long): List<OutGoins> = recordsDao.getOutgoinsOfPVr(pvrId)
 
 
     suspend fun insertOutGoin(outGoins: OutGoins){

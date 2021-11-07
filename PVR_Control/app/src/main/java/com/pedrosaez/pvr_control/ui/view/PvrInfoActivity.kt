@@ -1,11 +1,13 @@
 package com.pedrosaez.pvr_control.ui.view
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.pedrosaez.pvr_control.R
@@ -38,6 +40,7 @@ class PvrInfoActivity : AppCompatActivity() {
 
 
 
+
         // Vinculamos el Tablayout al viewPager
         val tabLayoutMediator = TabLayoutMediator(
             tabLayout,
@@ -61,6 +64,14 @@ class PvrInfoActivity : AppCompatActivity() {
         tabLayoutMediator.attach()
 
     }
+
+
+    override fun onBackPressed() {
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
+    }
+
+
     // Incializa las opciones del menu overflow
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater : MenuInflater = menuInflater
@@ -93,6 +104,8 @@ class PvrInfoActivity : AppCompatActivity() {
     fun getPvr():Serializable{
         return pvr
     }
+
+
 
 
 }

@@ -19,8 +19,8 @@ abstract class OutGoinDao : BaseDao<OutGoins>() {
     @Query("SELECT * FROM datos_pvrs")
     abstract fun getPvrWithOutGoins(): Flow<List<PvrAndOutGoins>>
 
-
+    @Transaction
     @Query("SELECT * FROM out_goins WHERE pvr_id =:pvrId ")
-    abstract fun getOutgoinsOfPVr(pvrId:Long): Flow<List<OutGoins>>
+    abstract fun getOutgoinsOfPVr(pvrId:Long): List<OutGoins>
 
 }

@@ -23,7 +23,7 @@ import com.pedrosaez.pvr_control.ui.viewmodel.AddPvrViewModel
 class AddPvrFragment : Fragment(), PvrModificationListener {
 
 
-    // variables para crear el binding en los fragment
+    // binding
     private lateinit var actualPvr:DatosPvr
     private var _binding: FragmentAddPvrBinding? = null
     private val binding get() = _binding!!
@@ -35,7 +35,6 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        val db = App.obtenerDatabase()
         _binding = FragmentAddPvrBinding.inflate(layoutInflater)
 
 

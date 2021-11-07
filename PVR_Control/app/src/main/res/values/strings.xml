@@ -53,8 +53,11 @@
     <string name="total_outgoins">Total gastos:</string>
     <string name="last_record">Último Registro</string>
     <string name="sales_money">Dinero de ventas:</string>
-    <string name="help_add_register">Añade registro de los totalesde la máquina para comenzar.\n Si la maquina es nueva y aun no tiene registro debes crear uno con los valores a 0 para que los parciales funcionen correctamente</string>
+    <string name="help_add_register">Añade registro de los totales de la máquina para comenzar.\n Si la maquina es nueva y aun no tiene registro debes crear uno con los valores a 0 para que los parciales funcionen correctamente</string>
     <string name="amount">Importe:</string>
     <string name="Date">Fecha:</string>
     <string name="concept">Concepto:</string>
+    <string name="machine_new_or_used">Necesitamos saber si la máquina que vas a usar es totalmente nueva o ya ha sido usada</string>
+    <string name="new_machine">Nueva</string>
+    <string name="used_machine">Usada</string>
 </resources>

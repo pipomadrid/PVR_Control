@@ -96,7 +96,7 @@
                     tools:text="234" />
 
                 <ImageButton
-                    android:id="@+id/button"
+                    android:id="@+id/restart_bills"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -143,7 +143,7 @@
                     tools:text="234" />
 
                 <ImageButton
-                    android:id="@+id/button2"
+                    android:id="@+id/restart_coins"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -335,10 +335,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
+                    android:inputType= "numberDecimal"
                     android:textColor="@color/primaryColor"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    tools:text="233446" />
+                    tools:text="2,33" />
             </LinearLayout>
 
             <LinearLayout

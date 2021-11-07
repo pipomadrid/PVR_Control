@@ -1,10 +1,8 @@
 package com.pedrosaez.pvr_control.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.pedrosaez.pvr_control.application.App
+import com.pedrosaez.pvr_control.database.AppDatabase
 import com.pedrosaez.pvr_control.database.entities.DatosPvr
 import com.pedrosaez.pvr_control.database.entities.OutGoins
 import com.pedrosaez.pvr_control.database.entities.ParcialRecords
@@ -20,17 +18,28 @@ class OutGoinViewModel:ViewModel() {
 
     private val repository: OutGoingRepository
     val getAllOutGoins: LiveData<List<PvrAndOutGoins>>
-
+    val db:AppDatabase = App.obtenerDatabase()
 
     init {
-        val db = App.obtenerDatabase().outGoinsDao()
-        repository = OutGoingRepository(db)
+        repository = OutGoingRepository(db.outGoinsDao())
         getAllOutGoins = repository.getAllOutGoins().asLiveData()
     }
 
-    fun getOutGoinsOfPVr(pvrId:Long):LiveData<List<OutGoins>>{
-        return repository.getOutGoinsOfPVr(pvrId).asLiveData()
+
+    fun getOutgoin(id:Long): LiveData<List<OutGoins>> {
+        val liveData = MutableLiveData<List<OutGoins>>()
+        viewModelScope.launch {
+            val outGoing = withContext(Dispatchers.IO) {
+                repository.getOutGoinsOfPVr(id)
+            }
+            liveData.postValue(outGoing)
+        }
+        return liveData
     }
+
+ /*   fun getOutGoinsOfPVr(pvrId:Long):LiveData<List<OutGoins>>{
+        return repository.getOutGoinsOfPVr(pvrId).asLiveData()
+    }*/
 
     fun saveOutGoin(outGoins: OutGoins) {
         viewModelScope.launch {

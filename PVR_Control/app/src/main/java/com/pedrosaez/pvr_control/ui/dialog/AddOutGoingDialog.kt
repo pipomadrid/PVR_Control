@@ -59,7 +59,7 @@ class AddOutGoingDialog( val outGoingListener:OutGoingModificationListener):Dial
             val prefs = requireActivity().getSharedPreferences((getString(R.string.prefs_file)), Context.MODE_PRIVATE)
             _pvrId = prefs.getLong("pvrId", -1)
 
-            model.getOutGoinsOfPVr(_pvrId!!).observe(this,{outGoingList ->
+            model.getOutgoin(_pvrId!!).observe(this,{outGoingList ->
 
                 if(outGoingList.isNotEmpty()) {
                     lastOutGoing = outGoingList.last()
@@ -74,20 +74,23 @@ class AddOutGoingDialog( val outGoingListener:OutGoingModificationListener):Dial
                     DialogInterface.OnClickListener { dialog, id ->
 
                         //obtenemmos los datos introducidos en los edittext
-                        val amount = etAmount.text?.toString() ?: " "
-                        val concept = etConcept.text?.toString() ?:" "
-                        var calendar = calendar.time
-                        val date = binding.etDate.text.toString()
-                        if(date.isEmpty()) {
-                            calendar = null
+                        var amount:Int?
+                        if(!etAmount.text.isNullOrEmpty()) {
+                            amount = etAmount.text?.toString()?.toInt()
+                        }else{
+                            amount = 0
                         }
 
+                        val concept = etConcept.text?.toString() ?:" "
+                        var myCalendar = calendar.time
+                        val outgoingDate = binding.etDate.text.toString()
+
                         // Creamos un gasto asociado a un PVR
-                        outGoing = OutGoins(amount.toInt(),concept,calendar, _pvrId!!)
+                        outGoing = OutGoins(amount!!,concept,myCalendar, _pvrId!!)
 
 
                         if (tag == "addOutGoin") {
-                            if (amount.isNotEmpty() && concept.isNotEmpty() && date.isNotEmpty()) {
+                            if (amount > 0 && concept.isNotEmpty() && outgoingDate.isNotEmpty()) {
 
                                /* machineListener.onPositiveClick()*/
                                outGoingListener.create(outGoing)
