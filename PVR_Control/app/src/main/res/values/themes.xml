@@ -38,6 +38,12 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="Divider_strong">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">5dp</item>
+        <item name="backgroundTint">@color/secondaryTextColor</item>/item>
+    </style>
+
 
 
 </resources>

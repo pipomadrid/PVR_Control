@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
 
     <com.google.android.material.card.MaterialCardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="190dp"
         android:layout_margin="5dp"
-        app:cardBackgroundColor="@color/secondaryColor"
+        app:cardBackgroundColor="@color/primaryLightColor"
         app:cardCornerRadius="20dp"
         app:strokeColor="@color/primaryDarkColor"
         app:strokeWidth="3dp"
@@ -43,7 +40,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_amount"
-                android:layout_width="wrap_content"
+                android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
@@ -66,20 +63,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_date" />
 
-            <EditText
+            <TextView
                 android:id="@+id/tv_concept"
-                android:layout_width="wrap_content"
+                android:layout_width="125dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
                 android:textColor="@color/primaryTextColor"
-                android:ems="10"
                 android:textSize="14sp"
-                android:gravity="start|top"
-                android:inputType="textMultiLine"
+                android:maxLines= "3"
                 app:layout_constraintStart_toEndOf="@id/tv_concept_label"
                 app:layout_constraintTop_toBottomOf="@id/tv_date"
-                tools:text="3211" />
+                app:layout_constraintEnd_toStartOf="@id/bt_delete_out_goins"
+                tools:text="3211asdddddddddddddddddddddddddadgjghjjghj" />
 
             <TextView
                 android:id="@+id/tv_date_label"
@@ -96,7 +93,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
+                android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
@@ -132,6 +129,3 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>

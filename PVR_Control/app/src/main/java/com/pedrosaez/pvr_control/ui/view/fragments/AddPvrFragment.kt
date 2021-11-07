@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +28,7 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
     private var _binding: FragmentAddPvrBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var mAdapterProductos: PvrAdapter
+    private lateinit var mAdapterProducts: PvrAdapter
     val model: AddPvrViewModel by viewModels()
 
 
@@ -69,11 +68,11 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
 
     private fun createRecyclerView(pvr_list: List<DatosPvr>) {
 
-        mAdapterProductos = PvrAdapter(requireContext(), pvr_list as MutableList<DatosPvr>,this)
+        mAdapterProducts = PvrAdapter(requireContext(), pvr_list as MutableList<DatosPvr>,this)
         val recyclerView = _binding!!.reciclerViewPvr
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            adapter = mAdapterProductos
+            adapter = mAdapterProducts
             addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
         }
 
@@ -86,7 +85,7 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
 
     override fun delete(pvr: DatosPvr) {
         model.delete(pvr)
-        mAdapterProductos.deletePvr(pvr)
+        mAdapterProducts.deletePvr(pvr)
     }
 
     override fun update(pvr: DatosPvr) {
@@ -120,7 +119,7 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
         //Si todos los campos están vacios se muestra el snackbar, si hay datos se actualiza el PVR con los mismos
         if(updateSomeField) {
             model.update(actualPvr)
-            mAdapterProductos.updatePvr(actualPvr)
+            mAdapterProducts.updatePvr(actualPvr)
 
         }else {
             Snackbar.make(requireView(), getString(R.string.no_data_found_to_update), Snackbar.LENGTH_LONG)
@@ -132,7 +131,7 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
 
     override fun create(pvr: DatosPvr) {
         model.save(pvr)
-        mAdapterProductos.createPvr(pvr)
+        mAdapterProducts.createPvr(pvr)
     }
 
 

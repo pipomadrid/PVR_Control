@@ -11,23 +11,27 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.pedrosaez.pvr_control.R
-import com.pedrosaez.pvr_control.database.entities.DatosPvr
 import com.pedrosaez.pvr_control.database.entities.OutGoins
-import com.pedrosaez.pvr_control.databinding.FragmentAddPvrBinding
 import com.pedrosaez.pvr_control.databinding.FragmentOutgoinsBinding
 import com.pedrosaez.pvr_control.ui.adapter.OutGoinsAdapter
-import com.pedrosaez.pvr_control.ui.adapter.PvrAdapter
-import com.pedrosaez.pvr_control.ui.viewmodel.AddPvrViewModel
+import com.pedrosaez.pvr_control.ui.dialog.AddOutGoingDialog
+import com.pedrosaez.pvr_control.ui.dialog.AddPvrDialogFragment
+import com.pedrosaez.pvr_control.ui.listeners.OutGoingModificationListener
 import com.pedrosaez.pvr_control.ui.viewmodel.OutGoinViewModel
 
 
-class OutGoinsFragment : Fragment() {
+class OutGoinsFragment : Fragment(),OutGoingModificationListener{
 
 
+
+    //binding
     private var _binding:FragmentOutgoinsBinding? = null
     private val binding get() = _binding!!
 
+
+    private lateinit var actualOutGoing:OutGoins
     private lateinit var mAdapterOutGoins: OutGoinsAdapter
     val model: OutGoinViewModel by activityViewModels()
 
@@ -37,10 +41,10 @@ class OutGoinsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-
         _binding =FragmentOutgoinsBinding.inflate(layoutInflater)
 
+
+        val addDialog: AddOutGoingDialog = AddOutGoingDialog(this)
         //obtenemos los datos del Pvr que vamos a usar
         val prefs = requireActivity().getSharedPreferences((getString(R.string.prefs_file)), Context.MODE_PRIVATE)
         val pvrId = prefs.getLong("pvrId", -1)
@@ -48,18 +52,16 @@ class OutGoinsFragment : Fragment() {
 
         //obtenemos la lista de gastos desde la función del viewmodel y creamos el recyclerView
         model.getOutGoinsOfPVr(pvrId).observe(viewLifecycleOwner, { //--> RECIBO NOTIFICACIÓN DE DATOS NUEVOS
-
             createRecyclerView(it)
 
-
-           /* for(i in it){
-                if(i.pvr.id==pvrId){
-
-                }
-            }*/
         })
 
 
+        binding.btNewOutgoing.setOnClickListener {
+            addDialog.show(childFragmentManager,"addOutGoin")
+
+
+        }
 
         return binding.root
 
@@ -69,7 +71,10 @@ class OutGoinsFragment : Fragment() {
 
     private fun createRecyclerView(outGoinList: List<OutGoins>) {
 
-        mAdapterOutGoins = OutGoinsAdapter(requireContext(), outGoinList as MutableList<OutGoins>)
+        //cambio el orden de la lista pra que muestre el ultimo gasto introducido
+        val outGoingreverseList = outGoinList.reversed()
+
+        mAdapterOutGoins = OutGoinsAdapter(requireContext(), outGoingreverseList as MutableList<OutGoins>,this)
         val recyclerView = _binding!!.outGoinRecycler
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -78,4 +83,51 @@ class OutGoinsFragment : Fragment() {
         }
 
     }
+    override fun sendActualOutGoing(outGoins: OutGoins) {
+        actualOutGoing = outGoins
+    }
+
+
+    override fun delete(outGoins: OutGoins) {
+      model.deleteOutGoin(outGoins)
+    }
+
+    override fun update(outGoins: OutGoins) {
+        var updateSomeField =false
+
+        //comprobamos los campos que se van a actualizar
+        if(outGoins.cost > 0){
+            actualOutGoing.cost = outGoins.cost
+            updateSomeField =true
+
+        }
+        if(outGoins.date.toString().isNotEmpty()){
+            actualOutGoing.date = outGoins.date
+            updateSomeField =true
+        }
+        if(outGoins.description.isNotEmpty()){
+            actualOutGoing.description = outGoins.description
+            updateSomeField =true
+        }
+
+        //Si todos los campos están vacios se muestra el snackbar, si hay datos se actualiza el PVR con los mismos
+        if(updateSomeField) {
+            model.updateOutGoin(actualOutGoing)
+            mAdapterOutGoins.updateOutGoing(actualOutGoing)
+
+        }else {
+            Snackbar.make(requireView(), getString(R.string.no_data_found_to_update), Snackbar.LENGTH_LONG)
+                    .setAnchorView(R.id.bt_new_outgoing)//mostramos en snackbar encima del floating button
+                    .show()
+        }
+
+    }
+
+    override fun create(outGoins: OutGoins) {
+        model.saveOutGoin(outGoins)
+        mAdapterOutGoins.createOutgoing(outGoins)
+
+    }
+
+
 }

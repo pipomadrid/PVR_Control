@@ -14,18 +14,19 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.database.entities.OutGoins
-import com.pedrosaez.pvr_control.database.entities.PvrMachine
-import com.pedrosaez.pvr_control.databinding.MachineDialogBinding
 import com.pedrosaez.pvr_control.databinding.OutGoinDialogBinding
-import com.pedrosaez.pvr_control.ui.viewmodel.MachineViewModel
+import com.pedrosaez.pvr_control.ui.listeners.OutGoingModificationListener
 import com.pedrosaez.pvr_control.ui.viewmodel.OutGoinViewModel
 import java.util.*
 
-class AddOutGoingDialog:DialogFragment() {
+class AddOutGoingDialog( val outGoingListener:OutGoingModificationListener):DialogFragment() {
 
 
+    //binding
     private var _binding: OutGoinDialogBinding?= null
     private val binding get() = _binding!!
+
+
     private lateinit var outGoing:OutGoins
     private lateinit var lastOutGoing:OutGoins
     private var _pvrId: Long? = null
@@ -58,14 +59,15 @@ class AddOutGoingDialog:DialogFragment() {
             val prefs = requireActivity().getSharedPreferences((getString(R.string.prefs_file)), Context.MODE_PRIVATE)
             _pvrId = prefs.getLong("pvrId", -1)
 
-            model.getOutGoinsOfPVr(_pvrId!!).observe(this,{
+            model.getOutGoinsOfPVr(_pvrId!!).observe(this,{outGoingList ->
 
-                if(it.isNotEmpty()) {
-                    lastOutGoing = it.last()
+                if(outGoingList.isNotEmpty()) {
+                    lastOutGoing = outGoingList.last()
                 }
         })
 
             builder.setPositiveButton(
+
                     if (tag == "addOutGoin") {
                         "Guardar"
                     } else "Actualizar",
@@ -80,7 +82,7 @@ class AddOutGoingDialog:DialogFragment() {
                             calendar = null
                         }
 
-                        // Creamos una nueva maquina con los datos del Pvr
+                        // Creamos un gasto asociado a un PVR
                         outGoing = OutGoins(amount.toInt(),concept,calendar, _pvrId!!)
 
 
@@ -88,20 +90,16 @@ class AddOutGoingDialog:DialogFragment() {
                             if (amount.isNotEmpty() && concept.isNotEmpty() && date.isNotEmpty()) {
 
                                /* machineListener.onPositiveClick()*/
-                                model.saveOutGoin(outGoing)
+                               outGoingListener.create(outGoing)
 
                             } else {
                                 Snackbar.make(viewParentfragment!!, getString(R.string.must_fill_fields), Snackbar.LENGTH_LONG)
-                                        .setAnchorView(R.id.bt_new_machine)
+                                        .setAnchorView(R.id.bt_new_outgoing)
                                         .show()
                             }
                         } else { // si el tag es updateMachine
-                          /*  machineListener.onPositiveClick()*/
-                            if (!checkAndUpdateData(outGoing)) {
-                                Snackbar.make(viewParentfragment!!, getString(R.string.no_data_found_to_update), Snackbar.LENGTH_LONG)
-                                        .setAnchorView(R.id.bt_new_machine)//mostramos en snackbar encima del floating button
-                                        .show()
-                            }
+
+                            outGoingListener.update(outGoing)
 
                         }
                         //Si todos los campos están vacios se muestra el snackbar, si hay datos se actualiza el PVR con los mismos
@@ -115,54 +113,6 @@ class AddOutGoingDialog:DialogFragment() {
             builder.create()
 
         } ?: throw IllegalStateException("Activity cannot be null")
-    }
-
-
-    fun checkAndUpdateData (updatedOutGoins : OutGoins):Boolean{
-
-        val machineAndPvrs: List<PvrMachine>? = model.getMachine.value
-        var actualMachine: PvrMachine?=null
-
-        if (machineAndPvrs != null) {
-            for (i in machineAndPvrs) {
-
-                if (i.pvrId == _pvrId) {
-                    actualMachine = i
-                }
-            }
-        }
-        var updateSomeField = false
-
-        //comprobamos los campos que se van a actualizar
-        if (updateMachine.brand.isNotEmpty()) {
-            actualMachine!!.brand = updateMachine.brand
-            updateSomeField = true
-        }
-        if (updateMachine.model.isNotEmpty()) {
-            actualMachine!!.model = updateMachine.model
-            updateSomeField = true
-        }
-        if (updateMachine.serialNumber.isNotEmpty()) {
-            actualMachine!!.serialNumber = updateMachine.serialNumber
-            updateSomeField = true
-        }
-        if (updateMachine.railsNumber !=0) {
-            actualMachine!!.railsNumber = updateMachine.railsNumber
-            updateSomeField = true
-        }
-        if (updateSomeField) {
-            model.update(actualMachine!!)
-
-        }
-
-
-        return updateSomeField
-    }
-
-    interface MachineDialogListener {
-
-        fun onPositiveClick()
-
     }
 
 
@@ -184,13 +134,3 @@ class AddOutGoingDialog:DialogFragment() {
 
 }
 
-
-
-
-
-
-
-
-
-
-}
