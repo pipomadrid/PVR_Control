@@ -52,10 +52,6 @@ class MachineFragment : Fragment(),AddMachineDialog.MachineDialogListener {
         val deleteButton = binding.btDelete
         val editButton = binding.btEdit
         val cardView = binding.cardView
-        if(pvrName.text.isNotEmpty()){ // seteamos la visiblidad de los elementos
-            cardIsvisible = true
-            addBtIsvisible = false
-        }
 
         cardView.isVisible = cardIsvisible
         addButton.isVisible = addBtIsvisible
@@ -75,7 +71,8 @@ class MachineFragment : Fragment(),AddMachineDialog.MachineDialogListener {
                 if (it != null) {
                     if (i.pvrId == pvrId) {
                         actualMachine = i
-                        binding.cardView.isVisible = true
+                        cardIsvisible = true
+                        cardView.isVisible = cardIsvisible
                         brand.text = i.brand
                         model.text = i.model
                         serialNumber.text = i.serialNumber

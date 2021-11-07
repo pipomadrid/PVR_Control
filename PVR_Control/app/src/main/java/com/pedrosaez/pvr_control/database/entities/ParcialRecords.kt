@@ -11,7 +11,6 @@ import androidx.room.ForeignKey
                         parentColumns = arrayOf("id"),
                         childColumns = arrayOf("pvr_id"),
                         onDelete = ForeignKey.CASCADE
-
                 )
         ))
 data class ParcialRecords (var sells:Long, var bills:Long, var coins:Long,var money:Long, @ColumnInfo(name = "pvr_id") val pvrId:Long):BaseEntity()

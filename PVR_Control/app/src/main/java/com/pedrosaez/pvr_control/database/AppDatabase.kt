@@ -3,16 +3,10 @@ package com.pedrosaez.pvr_control.database
 import android.content.Context
 import androidx.room.*
 import com.pedrosaez.pvr_control.database.converters.Converters
-import com.pedrosaez.pvr_control.database.dao.DatosPvrDao
-import com.pedrosaez.pvr_control.database.dao.MachineDao
-import com.pedrosaez.pvr_control.database.dao.ParcialRecordDao
-import com.pedrosaez.pvr_control.database.dao.TotalRecordsDao
-import com.pedrosaez.pvr_control.database.entities.DatosPvr
-import com.pedrosaez.pvr_control.database.entities.ParcialRecords
-import com.pedrosaez.pvr_control.database.entities.PvrMachine
-import com.pedrosaez.pvr_control.database.entities.TotalRecords
+import com.pedrosaez.pvr_control.database.dao.*
+import com.pedrosaez.pvr_control.database.entities.*
 
-@Database(entities = [DatosPvr::class,PvrMachine::class,TotalRecords::class,ParcialRecords::class],version = 1)
+@Database(entities = [DatosPvr::class,PvrMachine::class,TotalRecords::class,ParcialRecords::class,OutGoins::class],version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase :RoomDatabase() {
 
@@ -20,6 +14,7 @@ abstract class AppDatabase :RoomDatabase() {
         abstract fun machinePvrDao():MachineDao
         abstract fun totalRecordsDao():TotalRecordsDao
         abstract fun parcialRecordsDao():ParcialRecordDao
+        abstract fun outGoinsDao():OutGoinDao
 
 
         companion object{

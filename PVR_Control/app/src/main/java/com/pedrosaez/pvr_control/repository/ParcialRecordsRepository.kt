@@ -6,13 +6,14 @@ import com.pedrosaez.pvr_control.database.entities.ParcialRecords
 import com.pedrosaez.pvr_control.database.entities.PvrAndParcialRecords
 import kotlinx.coroutines.flow.Flow
 
+
 class ParcialRecordsRepository(private val recordsDao: ParcialRecordDao) {
 
 
     fun getParcialRecords(): LiveData<List<PvrAndParcialRecords>> = recordsDao.getPvrWithParcialRecords()
 
+    fun getAllParcial(): Flow<List<ParcialRecords>> = recordsDao.getAllParcialRecords()
 
-    suspend fun getRecordsFromPvr(id:Long): List<ParcialRecords> = recordsDao.getRecordsFromPvr(id)
 
     suspend fun insertRecord(parcialRecords: ParcialRecords){
         recordsDao.save(parcialRecords)

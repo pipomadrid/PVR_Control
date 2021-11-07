@@ -9,11 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MediatorLiveData
 import com.google.android.material.snackbar.Snackbar
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.database.entities.ParcialRecords
-import com.pedrosaez.pvr_control.database.entities.PvrAndParcialRecords
 import com.pedrosaez.pvr_control.database.entities.PvrAndTotalRecords
 import com.pedrosaez.pvr_control.database.entities.TotalRecords
 import com.pedrosaez.pvr_control.databinding.RecordsDialogBinding
@@ -24,15 +22,16 @@ import com.pedrosaez.pvr_control.ui.viewmodel.TotalRecordViewModel
 // Dialogo para introducir los registros de las máquinas de los pvr
 class AddRecordDialog: DialogFragment() {
 
-    private var _binding: RecordsDialogBinding?= null
+    private var _binding: RecordsDialogBinding? = null
     private val binding get() = _binding!!
-    private lateinit var  totalRecords : TotalRecords
-    private lateinit var  parcialRecords : ParcialRecords
+    private lateinit var totalRecords: TotalRecords
+    private lateinit var parcialRecords: ParcialRecords
     private var _pvrId: Long? = null
+    lateinit var lastParcialRecord:ParcialRecords
+    lateinit var lastTotalRecord:TotalRecords
 
     private val modelTotal: TotalRecordViewModel by activityViewModels()
     private val modelParcial: ParcialRecordViewModel by activityViewModels()
-
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -55,6 +54,36 @@ class AddRecordDialog: DialogFragment() {
             _pvrId = prefs.getLong("pvrId", -1)
 
 
+
+            // observamos las listas de pvr con totales y parciales para actualizarlas
+
+            modelParcial.getParcialRecords.observe(this,{
+
+                    for (i in it) {
+                        if (i.pvr.id == _pvrId) {
+                            if(i.parcialRecords.isNotEmpty()) {
+                                lastParcialRecord = i.parcialRecords.last()
+                            }
+                        }
+                    }
+            })
+
+            modelTotal.getTotalRecords.observe(this, {
+
+                for (i in it) {
+                    if (i.pvr.id ==_pvrId) {
+                        if(i.totalRecords.isNotEmpty()) {
+                            lastTotalRecord = i.totalRecords.last()
+                        }
+                    }
+                }
+
+            })
+
+
+
+
+
             builder.setPositiveButton(
                     if (tag == "addRecord") {
                         "Guardar"
@@ -65,6 +94,7 @@ class AddRecordDialog: DialogFragment() {
                         var totalBillsLong = 0L
                         var totalCoinsLong = 0L
                         var totalMoneyLong = 0L
+
                         if (!totalSales.text.isNullOrEmpty()) {
                             totalSalesLong = totalSales.text.toString().toLong()
                         }
@@ -75,13 +105,13 @@ class AddRecordDialog: DialogFragment() {
                             totalCoinsLong = totalCoins.text.toString().toLong()
                         }
                         if (!totalMoney.text.isNullOrEmpty()) {
-                            totalMoneyLong = totalCoins.text.toString().toLong()
+                            totalMoneyLong = totalMoney.text.toString().toLong()
                         }
 
 
 
-                        totalRecords = TotalRecords(totalSalesLong, totalBillsLong, totalCoinsLong,totalMoneyLong, _pvrId!!)
-                        parcialRecords = ParcialRecords(totalSalesLong, totalBillsLong, totalCoinsLong,totalMoneyLong, _pvrId!!)
+                        totalRecords = TotalRecords(totalSalesLong, totalBillsLong, totalCoinsLong, totalMoneyLong, _pvrId!!)
+                        parcialRecords = ParcialRecords(totalSalesLong, totalBillsLong, totalCoinsLong, totalMoneyLong, _pvrId!!)
 
 
                         if (tag == "addRecord") {
@@ -98,16 +128,12 @@ class AddRecordDialog: DialogFragment() {
                         } else { // en el caso de que el tag sea updateRecord
 
                             // comprobamos si hay datos introducidos
-                            if (!checkAndUpdateTotals(totalRecords)) {
+                               if (!checkAndUpdateTotals(totalRecords)) {
                                 Snackbar.make(viewParentfragment!!, getString(R.string.no_data_found_to_update), Snackbar.LENGTH_LONG)
                                         .setAnchorView(R.id.bt_new_record)//mostramos en snackbar encima del floating button
                                         .show()
                             }
-                            if(!checkAndUpdateParcial(parcialRecords) ){
-                                Snackbar.make(viewParentfragment!!, getString(R.string.no_data_found_to_update), Snackbar.LENGTH_LONG)
-                                        .setAnchorView(R.id.bt_new_record)//mostramos en snackbar encima del floating button
-                                        .show()
-                            }
+
 
                         }
 
@@ -120,98 +146,48 @@ class AddRecordDialog: DialogFragment() {
             builder.create()
 
         } ?: throw IllegalStateException("Activity cannot be null")
+
+
     }
 
     // función que comprueba si hay algun dato introducido en el dialogo y actualiza el registro de los totales
-    fun checkAndUpdateTotals (updatedRecord :TotalRecords):Boolean{
+    fun checkAndUpdateTotals(updatedRecord: TotalRecords): Boolean {
 
-        val actualTotalRecord:TotalRecords?=getTotals()
+      /*  val actualTotalRecord: TotalRecords = lastTotalRecord
+        val actualParcialRecord: ParcialRecords? = getParcials()*/
 
         // variable que checkea si se a introducido alguna cantidad
         var updateSomeField = false
 
-        if(updatedRecord.sells > 0){
-            actualTotalRecord!!.sells = updatedRecord.sells
+        if (updatedRecord.sells > 0) {
+            lastTotalRecord.sells = updatedRecord.sells
+            lastParcialRecord.sells = updatedRecord.sells
             updateSomeField = true
         }
-        if(updatedRecord.bills > 0){
-            actualTotalRecord!!.bills = updatedRecord.bills
+        if (updatedRecord.bills > 0) {
+            lastTotalRecord.bills = updatedRecord.bills
+            lastParcialRecord.bills = updatedRecord.bills
             updateSomeField = true
         }
-        if(updatedRecord.coins > 0 ){
-            actualTotalRecord!!.coins = updatedRecord.coins
+        if (updatedRecord.coins > 0) {
+            lastTotalRecord.coins = updatedRecord.coins
+            lastParcialRecord.coins = updatedRecord.coins
+            updateSomeField = true
+        }
+        if (updatedRecord.money > 0) {
+            lastTotalRecord.money = updatedRecord.money
+            lastParcialRecord.money = updatedRecord.money
             updateSomeField = true
         }
 
         // si hay algo introducido en cualquiera de los campos actualizamos parcial y total
         if (updateSomeField) {
-
-            modelTotal.updateTotal(actualTotalRecord!!)
+            modelTotal.updateTotal(lastTotalRecord)
+            modelParcial.updateParcial(lastParcialRecord)
         }
 
         return updateSomeField
 
     }
 
-    // funcion que comprueba si hay algun dato introducido en el dialogo y actualiza el registro de los parciales
-    fun checkAndUpdateParcial (updatedRecord :ParcialRecords):Boolean{
-
-        val actualParcialRecord:ParcialRecords?=getParcial()
-
-
-        // variable que checkea si se a introducido alguna cantidad
-        var updateSomeField = false
-
-        if(updatedRecord.sells > 0){
-            actualParcialRecord!!.sells = updatedRecord.sells
-            updateSomeField = true
-        }
-        if(updatedRecord.bills > 0){
-            actualParcialRecord!!.bills = updatedRecord.bills
-            updateSomeField = true
-        }
-        if(updatedRecord.coins > 0 ){
-            actualParcialRecord!!.coins = updatedRecord.coins
-            updateSomeField = true
-        }
-
-        // si hay algo introducido en cualquiera de los campos actualizamos parcial y total
-        if (updateSomeField) {
-            modelParcial.updateParcial(actualParcialRecord!!)
-        }
-
-        return updateSomeField
-
-    }
-
-    // obtenemos los registros de pvr y totales y los devolvemos
-    fun getTotals(): TotalRecords? {
-        val recordsAndPvrTotal: List<PvrAndTotalRecords>? = modelTotal.getTotalRecords.value
-        var actualTotalRecord:TotalRecords?=null
-
-        if (recordsAndPvrTotal != null) {
-            for (i in recordsAndPvrTotal) {
-                if (i.pvr.id == _pvrId) {
-                    actualTotalRecord = i.totalRecords.last()
-                }
-
-            }
-        }
-        return actualTotalRecord
-    }
-    // obtenemos los registros de pvr y parciales y los devolvemos
-    fun getParcial(): ParcialRecords? {
-        val recordsAndPvrParcial: List<PvrAndParcialRecords>? = modelParcial.getParcialRecords.value
-        var actualParcialRecord:ParcialRecords?=null
-
-        if (recordsAndPvrParcial != null) {
-            for (i in recordsAndPvrParcial) {
-                if (i.pvr.id == _pvrId) {
-                    actualParcialRecord = i.parcialRecords.last()
-                }
-
-            }
-        }
-        return actualParcialRecord
-    }
 }

@@ -24,6 +24,7 @@ class SalesSummaryFragment : Fragment() {
 
     private var parcialLastRecord: ParcialRecords? = null
     private var parcialFirstRecord : ParcialRecords? = null
+    private var totalLastRecord: TotalRecords? = null
     private var totalFirstRecord : TotalRecords? = null
     private var _binding: FragmentSalesSummaryBinding? = null
     private val binding get() = _binding!!
@@ -48,6 +49,7 @@ class SalesSummaryFragment : Fragment() {
         val parcialOutgoins = binding.tvParcialOutgoins
         val parcialPaymentsPvr = binding.tvPvrPayment
         val totalPaymentPvr = binding.tvTotalPaymentPvr
+        val totalGain = binding.tvTotalGains
         val parcialGain = binding.tvParcialGains
         val btRestartParcial = binding.btRestartParcials
 
@@ -59,7 +61,7 @@ class SalesSummaryFragment : Fragment() {
         var parcialMoneyLong = 0L
         var parcialPaymentDouble: Double
         var parcialGainDouble:Double
-        var totalGainInt :Double
+        var totalGainDouble :Double
         var totalPaymentPvrInt:Long
 
 
@@ -130,6 +132,24 @@ class SalesSummaryFragment : Fragment() {
 
         })
 
+        modelTotal.getTotalRecords.observe(viewLifecycleOwner, { recordList ->
+            for (i in recordList) {
+                if (recordList != null) {
+                    // obtenemos la lista de totales con el id del pvr
+                    if (i.pvr.id == pvrId) {
+                        //comprobamos que la lista tenga datos,si los tienes realizamos operaciones
+                        if (i.totalRecords.isNotEmpty()) {
+                            totalLastRecord = i.totalRecords.last()
+                            totalFirstRecord = i.totalRecords.first()
+                            totalGainDouble = (totalLastRecord!!.money - totalFirstRecord!!.money) * USER_COMISION
+                            totalGain.text = String.format("%.2f",totalGainDouble)
+                        }
+                    }
+                }
+            }
+
+
+        })
 
 
 

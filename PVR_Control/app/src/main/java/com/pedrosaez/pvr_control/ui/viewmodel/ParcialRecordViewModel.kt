@@ -1,14 +1,13 @@
 package com.pedrosaez.pvr_control.ui.viewmodel
 
-import android.icu.text.AlphabeticIndex
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.pedrosaez.pvr_control.application.App
 import com.pedrosaez.pvr_control.database.entities.ParcialRecords
 import com.pedrosaez.pvr_control.database.entities.PvrAndParcialRecords
 import com.pedrosaez.pvr_control.repository.ParcialRecordsRepository
-import com.pedrosaez.pvr_control.repository.TotalRecordsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -53,4 +52,7 @@ class ParcialRecordViewModel:ViewModel() {
             }
         }
     }
+
+    val getAllParcials:LiveData<List<ParcialRecords>> = repositoryParcials.getAllParcial().asLiveData()
+
 }

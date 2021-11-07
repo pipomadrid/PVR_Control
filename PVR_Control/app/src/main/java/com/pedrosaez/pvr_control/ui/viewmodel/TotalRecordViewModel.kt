@@ -24,8 +24,6 @@ class TotalRecordViewModel:ViewModel(){
 
 
     }
-
-
     //TOTALS
     fun saveTotal (totalRecords: TotalRecords){
         viewModelScope.launch {

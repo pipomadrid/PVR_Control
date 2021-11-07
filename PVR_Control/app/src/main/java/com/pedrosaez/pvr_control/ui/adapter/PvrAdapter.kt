@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val updateRecyclerView: PvrModificationListener):RecyclerView.Adapter<PvrAdapter.MyViewHolder>(){
+class PvrAdapter(val context: Context, val pvrList: MutableList<DatosPvr>, val updateRecyclerView: PvrModificationListener):RecyclerView.Adapter<PvrAdapter.MyViewHolder>(){
 
 
 
@@ -51,7 +51,7 @@ class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val u
 
     // vincula los datos de cada elemento del datasource(listas en este caso) con las vistas correspondientes
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val item = pvr_list[position]
+        val item = pvrList[position]
         bind(holder, item)
 
         holder.deleteButton.setOnClickListener {
@@ -99,7 +99,7 @@ class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val u
 
 
 
-    override fun getItemCount()= pvr_list.size
+    override fun getItemCount()= pvrList.size
 
 
 
@@ -131,19 +131,19 @@ class PvrAdapter(val context: Context, val pvr_list: MutableList<DatosPvr>,val u
     }
 
     fun createPvr(pvr: DatosPvr) {
-        pvr_list.add(pvr)
-        notifyItemInserted(pvr_list.size)
+        pvrList.add(pvr)
+        notifyItemInserted(pvrList.size)
     }
 
     fun deletePvr(pvr: DatosPvr) {
-        val pos = pvr_list.indexOf(pvr)
-        pvr_list.removeAt(pos)
+        val pos = pvrList.indexOf(pvr)
+        pvrList.removeAt(pos)
         notifyItemRemoved(pos)
     }
 
     fun updatePvr(pvr: DatosPvr) {
-        val pos = pvr_list.indexOf(pvr)
-        pvr_list[pos] = pvr
+        val pos = pvrList.indexOf(pvr)
+        pvrList[pos] = pvr
         notifyItemChanged(pos)
     }
 
