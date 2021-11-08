@@ -92,8 +92,8 @@ class AddRecordDialog: DialogFragment() {
 
                         var totalSalesLong = 0L
                         var totalBillsLong = 0L
-                        var totalCoinsLong = 0L
-                        var totalMoneyLong = 0L
+                        var totalCoinsLong = 0.0
+                        var totalMoneyLong = 0.0
 
                         if (!totalSales.text.isNullOrEmpty()) {
                             totalSalesLong = totalSales.text.toString().toLong()
@@ -102,10 +102,10 @@ class AddRecordDialog: DialogFragment() {
                             totalBillsLong = totalBills.text.toString().toLong()
                         }
                         if (!totalCoins.text.isNullOrEmpty()) {
-                            totalCoinsLong = totalCoins.text.toString().toLong()
+                            totalCoinsLong = totalCoins.text.toString().toDouble()
                         }
                         if (!totalMoney.text.isNullOrEmpty()) {
-                            totalMoneyLong = totalMoney.text.toString().toLong()
+                            totalMoneyLong = totalMoney.text.toString().toDouble()
                         }
 
 
@@ -159,22 +159,22 @@ class AddRecordDialog: DialogFragment() {
         // variable que checkea si se a introducido alguna cantidad
         var updateSomeField = false
 
-        if (updatedRecord.sells > 0) {
+        if (updatedRecord.sells >= 0) {
             lastTotalRecord.sells = updatedRecord.sells
             lastParcialRecord.sells = updatedRecord.sells
             updateSomeField = true
         }
-        if (updatedRecord.bills > 0) {
+        if (updatedRecord.bills >= 0) {
             lastTotalRecord.bills = updatedRecord.bills
             lastParcialRecord.bills = updatedRecord.bills
             updateSomeField = true
         }
-        if (updatedRecord.coins > 0) {
+        if (updatedRecord.coins >= 0) {
             lastTotalRecord.coins = updatedRecord.coins
             lastParcialRecord.coins = updatedRecord.coins
             updateSomeField = true
         }
-        if (updatedRecord.money > 0) {
+        if (updatedRecord.money >= 0) {
             lastTotalRecord.money = updatedRecord.money
             lastParcialRecord.money = updatedRecord.money
             updateSomeField = true

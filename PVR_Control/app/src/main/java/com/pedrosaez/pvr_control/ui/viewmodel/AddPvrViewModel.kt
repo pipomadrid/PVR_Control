@@ -3,6 +3,7 @@ package com.pedrosaez.pvr_control.ui.viewmodel
 import androidx.lifecycle.*
 import com.pedrosaez.pvr_control.application.App
 import com.pedrosaez.pvr_control.database.entities.DatosPvr
+import com.pedrosaez.pvr_control.database.entities.UserAndPvr
 import com.pedrosaez.pvr_control.repository.PvrRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,7 +12,7 @@ import kotlinx.coroutines.withContext
 class AddPvrViewModel:ViewModel() {
 
     private val repository :PvrRepository
-    val getAll_Pvr : LiveData<List<DatosPvr>>
+    val getAll_Pvr : LiveData<List<UserAndPvr>>
 
     init{
          val db = App.obtenerDatabase().datosPvrDao()

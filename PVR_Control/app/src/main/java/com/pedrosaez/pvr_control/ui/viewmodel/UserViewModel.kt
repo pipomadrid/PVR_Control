@@ -1,15 +1,57 @@
 package com.pedrosaez.pvr_control.ui.viewmodel
 
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.pedrosaez.pvr_control.application.App
+import com.pedrosaez.pvr_control.database.entities.PvrMachine
+import com.pedrosaez.pvr_control.database.entities.User
+import com.pedrosaez.pvr_control.repository.UserRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class UserViewModel: ViewModel() {
+
+
+    private val userRepository:UserRepository
+    val getAllUser:LiveData<List<User>>
+
+    init {
+        val db = App.obtenerDatabase()
+        userRepository = UserRepository(db.userDao())
+        getAllUser = userRepository.getAllUser().asLiveData()
+
+    }
+    fun save (user: User){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                userRepository.insertUser(user)
+            }
+        }
+
+    }
+
+    fun delete (user: User){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                userRepository.deleteUser(user)
+            }
+        }
+
+    }
+
+    fun update (user: User){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                userRepository.updateUser(user)
+            }
+        }
+
+    }
 
 
     fun signUp(email: String, password: String): MutableLiveData<Exception> {

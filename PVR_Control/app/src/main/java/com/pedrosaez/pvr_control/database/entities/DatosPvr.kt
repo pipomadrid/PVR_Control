@@ -10,10 +10,17 @@ import java.io.Serializable
 import java.util.*
 
 
-@Entity(tableName = "datos_pvrs")
-
+@Entity(tableName = "datos_pvrs",
+        foreignKeys = arrayOf(
+                ForeignKey(
+                        entity = User::class,
+                        parentColumns = arrayOf("id"),
+                        childColumns = arrayOf("user_id"),
+                        onDelete = CASCADE
+                ))
+)
 data class DatosPvr(@ColumnInfo(name = "pvr_name") var pvrName: String, @ColumnInfo(name = "name_surname") var nameSurname: String,
-                    var address: String, var phone: String, @Nullable var authDate: Date?) : BaseEntity(), Serializable
+                    var address: String, var phone: String, @Nullable var authDate: Date?, @ColumnInfo(name = "user_id") val userId: Long) : BaseEntity(), Serializable
 
 
 

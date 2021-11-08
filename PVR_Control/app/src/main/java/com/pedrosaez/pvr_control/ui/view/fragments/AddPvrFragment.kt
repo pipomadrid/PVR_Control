@@ -1,23 +1,28 @@
 package com.pedrosaez.pvr_control.ui.view.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GetTokenResult
 import com.pedrosaez.pvr_control.R
-import com.pedrosaez.pvr_control.application.App
 import com.pedrosaez.pvr_control.database.entities.DatosPvr
 import com.pedrosaez.pvr_control.databinding.FragmentAddPvrBinding
 import com.pedrosaez.pvr_control.ui.adapter.PvrAdapter
 import com.pedrosaez.pvr_control.ui.dialog.AddPvrDialogFragment
 import com.pedrosaez.pvr_control.ui.listeners.PvrModificationListener
 import com.pedrosaez.pvr_control.ui.viewmodel.AddPvrViewModel
+import com.pedrosaez.pvr_control.ui.viewmodel.UserViewModel
 
 
 class AddPvrFragment : Fragment(), PvrModificationListener {
@@ -30,6 +35,7 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
 
     private lateinit var mAdapterProducts: PvrAdapter
     val model: AddPvrViewModel by viewModels()
+    val modelUser:UserViewModel by activityViewModels()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -40,10 +46,30 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
 
         val addDialog: AddPvrDialogFragment = AddPvrDialogFragment(this)
 
+        val prefs = requireActivity().getSharedPreferences((getString(R.string.prefs_file)), Context.MODE_PRIVATE)
 
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        var userId:Long =0
+        var uid = currentUser?.uid
+
+        modelUser.getAllUser.observe(viewLifecycleOwner, {
+            for (i in it) {
+                if (i.uid ==uid ) {
+                    userId = i.id
+                    prefs.edit().putLong("userId", userId).apply()
+                }
+            }
+        })
 
         model.getAll_Pvr.observe(viewLifecycleOwner, { //--> RECIBO NOTIFICACIÓN DE DATOS NUEVOS
-            createRecyclerView(it)
+
+            for (i in it) {
+                if (i.user.uid == uid) {
+                    /* userId= i.user.id*/
+                    createRecyclerView(i.DatosPvr)
+                }
+
+            }
         })
 
 
@@ -67,7 +93,7 @@ class AddPvrFragment : Fragment(), PvrModificationListener {
 
     private fun createRecyclerView(pvr_list: List<DatosPvr>) {
 
-        mAdapterProducts = PvrAdapter(requireContext(), pvr_list as MutableList<DatosPvr>,this)
+        mAdapterProducts = PvrAdapter(requireContext(), pvr_list as MutableList<DatosPvr>, this)
         val recyclerView = _binding!!.reciclerViewPvr
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)

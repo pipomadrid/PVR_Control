@@ -1,6 +1,8 @@
 package com.pedrosaez.pvr_control.ui.view.fragments
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -42,12 +44,14 @@ class SalesSummaryFragment : Fragment() {
 
 
 
-        //setup
+        //obtenemos los datos del pvr
         val prefs = requireActivity().getSharedPreferences((getString(R.string.prefs_file)), Context.MODE_PRIVATE)
         val pvrNamePrefs: String? = prefs.getString("pvrName", "error ")
         val pvrId = prefs.getLong("pvrId", -1)
 
 
+
+        //Setup
         //Parcials textview
         val parcialSales = binding.tvParcialSells
         val parcialBills = binding.tvParcialBills
@@ -73,12 +77,12 @@ class SalesSummaryFragment : Fragment() {
         // variables para realizar las operaciones
         var parcialSalesLong: Long
         var parcialBillLong = 0L
-        var parcialCoinsLong = 0L
-        var parcialMoneyLong = 0L
+        var parcialCoinsDouble = 0.0
+        var parcialMoneyDouble = 0.0
         var parcialPaymentDouble: Double
         var parcialGainDouble:Double = 0.0
         var totalGainDouble :Double = 0.0
-        var totalPaymentPvrInt:Long
+        var totalPaymentPvrDouble:Double = 0.0
     /*    var outGoingListWithParcials: MutableList<OutGoins>? = null*/
         var parcialOutGoinsAmount:Double =0.0
         var totalOutGoinsAmount:Double =0.0
@@ -104,9 +108,9 @@ class SalesSummaryFragment : Fragment() {
             }
 
             totalGainDoubleMinusOutGoings =totalGainDouble - totalOutGoinsAmount
-            totalOutGoins.text = totalOutGoinsAmount.toString()
-            parcialOutgoins.text = parcialOutGoinsAmount.toString()
-            totalGain.text = totalGainDoubleMinusOutGoings.toString()
+            totalOutGoins.text = totalOutGoinsAmount.toString() + " \u20ac"
+            parcialOutgoins.text = parcialOutGoinsAmount.toString() +" \u20ac"
+            totalGain.text = String.format("%.2f", totalGainDoubleMinusOutGoings) +" \u20ac"
            /* outGoingList = it*/
            /* if(!outGoingList.isNullOrEmpty()) {
                 for (outgoing in outGoingList!!) {
@@ -118,12 +122,11 @@ class SalesSummaryFragment : Fragment() {
             }*/
 
 
-
-
         })
 
         modelParcial.getParcialRecords.observe(viewLifecycleOwner, { recordList ->
 
+            parcialOutGoinsAmount = 0.0
 
             for (record in recordList) {
                 if (recordList != null) {
@@ -133,11 +136,13 @@ class SalesSummaryFragment : Fragment() {
                         if (record.parcialRecords.isNotEmpty()) {
                             parcialLastRecord = record.parcialRecords.last()
                             parcialFirstRecord = record.parcialRecords.first()
-
+                            val timeLast = parcialLastRecord!!.createAt.time
+                            val timeFirst = parcialFirstRecord!!.createAt.time
                             //Iteramos sobre  los gastos  entre las fechas de los parciales y  obtenemos la suma
                             if (outGoingList?.isNotEmpty() == true) {
                                 for (outgoing in outGoingList!!) {
-                                    if (outgoing.date >= parcialFirstRecord!!.createAt && outgoing.date <= parcialLastRecord!!.createAt) {
+                                    val outgoinDate = outgoing.date.time
+                                    if (outgoinDate in timeFirst..timeLast) {
                                         parcialOutGoinsAmount += outgoing.cost
                                     }
                                 }
@@ -147,23 +152,25 @@ class SalesSummaryFragment : Fragment() {
                             if (record.parcialRecords.size > 1) {
                                 parcialSalesLong = parcialLastRecord!!.sells - parcialFirstRecord!!.sells
                                 parcialBillLong = parcialLastRecord!!.bills - parcialFirstRecord!!.bills
-                                parcialCoinsLong = parcialLastRecord!!.coins - parcialFirstRecord!!.coins
-                                parcialMoneyLong = parcialLastRecord!!.money - parcialFirstRecord!!.money
+                                parcialCoinsDouble = parcialLastRecord!!.coins - parcialFirstRecord!!.coins
+                                parcialMoneyDouble = parcialLastRecord!!.money - parcialFirstRecord!!.money
                             } else {
                                 //si la lista solo tiene un registro
                                 parcialSalesLong = 0
                                 parcialBillLong = 0
-                                parcialCoinsLong = 0
-                                parcialMoneyLong = 0
+                                parcialCoinsDouble = 0.0
+                                parcialMoneyDouble = 0.0
                                 parcialOutGoinsAmount = 0.0
                             }
+                            //Introducomos los datos en los textView para mostrarlos
                             parcialPaymentDouble = parcialSalesLong * PVR_COMISION
-                            parcialGainDouble = (parcialMoneyLong * USER_COMISION) - parcialOutGoinsAmount
-                            parcialSales.text = (parcialSalesLong).toString()
-                            parcialBills.text = (parcialBillLong).toString()
-                            parcialCoins.text = (parcialCoinsLong).toString()
-                            parcialPaymentsPvr.text = String.format("%.2f", parcialPaymentDouble)
-                            parcialGain.text = String.format("%.2f", parcialGainDouble)
+                            parcialGainDouble = (parcialMoneyDouble * USER_COMISION) - parcialOutGoinsAmount
+                            parcialSales.text = (parcialSalesLong).toString()  + " paquetes"
+                            parcialBills.text = (parcialBillLong).toString() + " \u20ac"
+                            parcialCoins.text = (parcialCoinsDouble).toString() + " \u20ac"
+                            parcialPaymentsPvr.text = String.format("%.2f", parcialPaymentDouble) + " \u20ac"
+                            parcialGain.text = String.format("%.2f", parcialGainDouble) + " \u20ac"
+                            parcialOutgoins.text = String.format("%.2f", parcialOutGoinsAmount) + " \u20ac"
 
 
                         } else {
@@ -176,25 +183,97 @@ class SalesSummaryFragment : Fragment() {
             }
 
             btRestartParcial.setOnClickListener {
-                for (i in recordList) {
-                    if (recordList != null) {
-                        // obtenemos la lista de parciales con el id del pvr
-                        if (i.pvr.id == pvrId) {
-                            // por cada registro  del pvr borramos todos menos el último
-                            for (x in i.parcialRecords) {
-                                if (x != i.parcialRecords.last()) {
-                                    modelParcial.deleteParcial(x)
-                                }
-                            }
-                        }
-                    }
-                }
-                parcialSales.text = ""
-                parcialBills.text = ""
-                parcialCoins.text = ""
 
+                val builder = AlertDialog.Builder(context)
+                builder.setMessage("¿Seguro que quieres poner a 0 los parciales?")
+                        .setPositiveButton("resetear",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    for (i in recordList) {
+                                        if (recordList != null) {
+                                            // obtenemos la lista de parciales con el id del pvr
+                                            if (i.pvr.id == pvrId) {
+                                                // por cada registro  del pvr borramos todos menos el último
+                                                for (x in i.parcialRecords) {
+                                                    if (x != i.parcialRecords.last()) {
+                                                        modelParcial.deleteParcial(x)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    parcialSales.text = ""
+                                    parcialBills.text = ""
+                                    parcialCoins.text = ""
+                                })
+                        .setNegativeButton(("cancelar"),
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    dialog.cancel()
+                                })
+                // Create the AlertDialog object and return it
+                builder.create()
+                builder.show()
 
             }
+
+
+            btRestartBills.setOnClickListener {
+                val builder = AlertDialog.Builder(context)
+                builder.setMessage("¿Seguro que quieres poner a 0 el registro de billetes?")
+                        .setPositiveButton("resetear",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    for(i in recordList){
+                                        if (recordList != null) {
+                                            // obtenemos la lista de parciales con el id del pvr
+                                            if (i.pvr.id == pvrId) {
+                                                //  ponemos a 0  los billetes de los parciales del pvr
+                                                for(x in i.parcialRecords){
+                                                    x.bills = 0
+                                                    modelParcial.updateParcial(x)
+                                                }
+                                            }
+                                        }
+                                    }
+                                })
+                        .setNegativeButton(("cancelar"),
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    dialog.cancel()
+                                })
+                // Create the AlertDialog object and return it
+                builder.create()
+                builder.show()
+
+            }
+
+
+
+            btRestartCoins.setOnClickListener {
+
+                val builder = AlertDialog.Builder(context)
+                builder.setMessage("¿Seguro que quieres poner a 0 el registro de monedas?")
+                        .setPositiveButton("resetear",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    for(i in recordList){
+                                        if (recordList != null) {
+                                            // obtenemos la lista de parciales con el id del pvr
+                                            if (i.pvr.id == pvrId) {
+                                                //  ponemos a 0  los billetes de los parciales del pvr
+                                                for(x in i.parcialRecords){
+                                                    x.coins = 0.0
+                                                    modelParcial.updateParcial(x)
+                                                }
+                                            }                        }
+                                    }
+                                })
+                        .setNegativeButton(("cancelar"),
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    dialog.cancel()
+                                })
+                // Create the AlertDialog object and return it
+                builder.create()
+                builder.show()
+
+            }
+
 
         })
 
@@ -208,8 +287,12 @@ class SalesSummaryFragment : Fragment() {
                         if (i.totalRecords.isNotEmpty()) {
                             totalLastRecord = i.totalRecords.last()
                             totalFirstRecord = i.totalRecords.first()
-                            totalGainDouble = ((totalLastRecord!!.money - totalFirstRecord!!.money) * USER_COMISION)
-                            totalGain.text= String.format("%.2f",totalGainDouble)
+                            totalGainDouble = ((totalLastRecord!!.money - totalFirstRecord!!.money) * USER_COMISION) - totalOutGoinsAmount
+                            totalPaymentPvrDouble = (totalLastRecord!!.sells - totalFirstRecord!!.sells) * PVR_COMISION
+
+                            totalPaymentPvr.text = String.format("%.2f",totalPaymentPvrDouble) + " \u20ac"
+                            totalGain.text= String.format("%.2f",totalGainDouble) + " \u20ac"
+
                         }
                     }
                 }
@@ -225,5 +308,7 @@ class SalesSummaryFragment : Fragment() {
 
         return binding.root
     }
+
+
 
 }

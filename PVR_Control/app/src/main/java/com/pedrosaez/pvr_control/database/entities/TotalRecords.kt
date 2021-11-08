@@ -15,4 +15,4 @@ import androidx.room.ForeignKey
                 )
 
         ))
-data class TotalRecords (var sells:Long, var bills:Long, var coins:Long,var money:Long, @ColumnInfo(name = "pvr_id") val pvrId:Long):BaseEntity()
+data class TotalRecords (var sells:Long, var bills:Long, var coins:Double,var money:Double, @ColumnInfo(name = "pvr_id") val pvrId:Long):BaseEntity()

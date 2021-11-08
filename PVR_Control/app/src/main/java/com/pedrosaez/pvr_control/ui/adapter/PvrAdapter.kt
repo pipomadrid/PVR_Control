@@ -85,13 +85,17 @@ class PvrAdapter(val context: Context, val pvrList: MutableList<DatosPvr>, val u
 
             //Uso las sharedPreferences para pasar el id y el nombre del Pvr para poder gestionar los datos del mismo
             val prefs = context.getSharedPreferences((context.getString(R.string.prefs_file)), Context.MODE_PRIVATE)
+            val prefsFlag = context.getSharedPreferences((context.getString(R.string.prefs_file_flag)), Context.MODE_PRIVATE)
 
-            val checkMachineNew = prefs.getBoolean(item.pvrName, false) //bandera para controlar si el usuario ha elegido maquina nueva o usada
+            val checkMachineNew = prefsFlag.getBoolean(item.pvrName, false) //bandera para controlar si el usuario ha elegido maquina nueva o usada
+
             with(prefs.edit()) {
                 putLong("pvrId", item.id)
                 putString("pvrName", item.pvrName)
                 apply()
-                //Si el usuario ha elegido vamos a la activity de informaciond el pvr
+
+
+                //Si el usuario ha elegido vamos a la activity de informacion de el pvr
                 // si no vamos a la activiyty para elegir
                 if (checkMachineNew) {
                     val intent = Intent(context, PvrInfoActivity::class.java)

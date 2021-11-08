@@ -3,17 +3,21 @@ package com.pedrosaez.pvr_control.ui.dialog
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.database.entities.DatosPvr
 import com.pedrosaez.pvr_control.databinding.AddDialogBinding
 import com.pedrosaez.pvr_control.ui.listeners.PvrModificationListener
+import com.pedrosaez.pvr_control.ui.viewmodel.UserViewModel
 import java.util.*
 
 
@@ -24,6 +28,8 @@ class AddPvrDialogFragment(val updateRecyclerViewListener: PvrModificationListen
 
     private var _binding: AddDialogBinding?= null
     private val binding get() = _binding!!
+
+    private val modelUser:UserViewModel by activityViewModels()
 
 
     private lateinit var pvr:DatosPvr
@@ -68,8 +74,25 @@ class AddPvrDialogFragment(val updateRecyclerViewListener: PvrModificationListen
                     if (authDateString.isEmpty()) {
                         calendarPvr = null
                     }
+
+                    val currentUser= FirebaseAuth.getInstance().currentUser
+                    val token = currentUser?.getIdToken(true).toString()
+
+
+                    val prefs = requireActivity().getSharedPreferences((getString(R.string.prefs_file)), Context.MODE_PRIVATE)
+
+                    val userId = prefs.getLong("userId",0)
+                /*    modelUser.getAllUser.observe(viewLifecycleOwner,{
+                        for(i in it){
+                            if(i.token ==token ){
+                                userId = i.id
+                            }
+                        }
+
+                    })*/
+
                     // creamos un nuevo Pvr con los datos introducidos en el Dialog para crear o actualizar según el caso
-                    pvr = DatosPvr(pvrName.text.toString(), nameSurname.text.toString(), addressPvr, phonePvr, calendarPvr)
+                    pvr = DatosPvr(pvrName.text.toString(), nameSurname.text.toString(), addressPvr, phonePvr, calendarPvr,userId)
 
                     if (tag == "AddDialog") {
                         if (nameSurname.text.toString().isNotEmpty() && pvrName.text.toString().isNotEmpty()) {

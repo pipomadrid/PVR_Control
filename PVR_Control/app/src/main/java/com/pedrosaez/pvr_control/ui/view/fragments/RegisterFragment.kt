@@ -14,13 +14,14 @@ import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.pedrosaez.pvr_control.R
+import com.pedrosaez.pvr_control.database.entities.User
 import com.pedrosaez.pvr_control.databinding.FragmentRegisterBinding
 import com.pedrosaez.pvr_control.ui.viewmodel.UserViewModel
 
 class RegisterFragment : Fragment() {
+
 
     // variables para crear el binding en los fragment
     private lateinit var binding: FragmentRegisterBinding
@@ -45,7 +46,6 @@ class RegisterFragment : Fragment() {
         val tilPassword = binding.tilPasswordRegister
         val tilPasswordConfirm = binding.tilPasswordConfirmRegister
 
-        auth = Firebase.auth
 
         //borrado  de errores al coger foco
         email.setOnFocusChangeListener { v, hasFocus ->

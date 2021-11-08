@@ -13,4 +13,4 @@ import androidx.room.ForeignKey
                         onDelete = ForeignKey.CASCADE
                 )
         ))
-data class ParcialRecords (var sells:Long, var bills:Long, var coins:Long,var money:Long, @ColumnInfo(name = "pvr_id") val pvrId:Long):BaseEntity()
+data class ParcialRecords (var sells:Long, var bills:Long, var coins:Double,var money:Double, @ColumnInfo(name = "pvr_id") val pvrId:Long):BaseEntity()

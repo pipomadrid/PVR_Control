@@ -14,8 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GetTokenResult
 import com.pedrosaez.pvr_control.R
+import com.pedrosaez.pvr_control.database.entities.User
 import com.pedrosaez.pvr_control.databinding.FragmentLoginBinding
 import com.pedrosaez.pvr_control.ui.view.HomeActivity
 import com.pedrosaez.pvr_control.ui.viewmodel.UserViewModel
@@ -56,13 +59,20 @@ class LoginFragment : Fragment() {
             //ir a siguiente fragment
             if(email.text.isNullOrEmpty() || password.text.isNullOrEmpty()){
                Toast.makeText(requireContext(),"Los campos no pueden estar vacios",Toast.LENGTH_SHORT).show()
-            }else {
+            } else {
                 model.signIn(email.text.toString(), password.text.toString()).observe(requireActivity(), {
                     if (it.isSuccessful) {
+                        val currentUser = FirebaseAuth.getInstance().currentUser
+                        val userEmail = currentUser?.email
+                        var userToken: String? = ""
+                        var uid = currentUser?.uid
+
+                        model.save(User(userEmail!!, uid!!))
+
                         setPrefs(email.text.toString())
                         goHome(this)
                     } else {
-                        showAlert(requireContext(),"Error","Error al iniciar sesión")
+                        showAlert(requireContext(), "Error", "Error al iniciar sesión")
                     }
                 })
             }

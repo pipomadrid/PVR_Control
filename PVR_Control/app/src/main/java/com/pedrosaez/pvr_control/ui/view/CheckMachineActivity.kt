@@ -10,9 +10,13 @@ import com.pedrosaez.pvr_control.databinding.ActivityCheckMachineBinding
 import com.pedrosaez.pvr_control.databinding.ActivityHomeBinding
 
 
-private lateinit var binding: ActivityCheckMachineBinding
+
 
 class CheckMachineActivity : AppCompatActivity() {
+
+
+    private lateinit var binding: ActivityCheckMachineBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_machine)
@@ -24,11 +28,12 @@ class CheckMachineActivity : AppCompatActivity() {
         val btNew = binding.btMachineNew
         val btUsed = binding.btMachineUsed
         val prefs = this.getSharedPreferences((this.getString(R.string.prefs_file)), Context.MODE_PRIVATE)
+        val prefFlag = this.getSharedPreferences((this.getString(R.string.prefs_file_flag)), Context.MODE_PRIVATE)
         val pvrName = prefs.getString("pvrName","")
 
         btNew.setOnClickListener {
 
-            with(prefs.edit()) {
+            with(prefFlag.edit()) {
                 putBoolean(pvrName, true)
                 apply()
             }
@@ -40,7 +45,7 @@ class CheckMachineActivity : AppCompatActivity() {
         }
 
         btUsed.setOnClickListener {
-            with(prefs.edit()) {
+            with(prefFlag.edit()) {
                 putBoolean(pvrName, true)
                 apply()
             }
