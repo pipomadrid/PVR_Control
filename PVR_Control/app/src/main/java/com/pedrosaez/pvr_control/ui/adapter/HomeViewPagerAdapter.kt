@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.pedrosaez.pvr_control.ui.view.fragments.AddPvrFragment
 import com.pedrosaez.pvr_control.ui.view.fragments.OutGoinsFragment
+import com.pedrosaez.pvr_control.ui.view.fragments.ReportFragment
 
 
 //Clase adaptadora para viewpager
@@ -18,7 +19,7 @@ class HomeViewPagerAdapter (fm:FragmentActivity):FragmentStateAdapter(fm) {
         when(position){
 
             0->return AddPvrFragment()
-            1->return OutGoinsFragment()
+            1->return ReportFragment()
         }
         return AddPvrFragment()
     }

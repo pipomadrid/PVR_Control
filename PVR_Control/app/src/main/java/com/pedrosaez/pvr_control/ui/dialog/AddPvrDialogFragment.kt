@@ -122,6 +122,9 @@ class AddPvrDialogFragment(val updateRecyclerViewListener: PvrModificationListen
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
+
+
+
     //Funcion para mostrar el DatePickerDialog
     private fun showDatePickerDialog(editText:EditText,calendar:Calendar){
 

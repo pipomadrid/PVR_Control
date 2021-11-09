@@ -11,4 +11,5 @@ abstract class UserDao:BaseDao<User>() {
 
     @Query(value = "SELECT * FROM user")
     abstract  fun findAllUser(): Flow<List<User>>
+
 }

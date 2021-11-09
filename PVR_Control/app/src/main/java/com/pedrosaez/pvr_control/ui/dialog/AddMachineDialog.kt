@@ -18,7 +18,7 @@ import com.pedrosaez.pvr_control.ui.viewmodel.MachineViewModel
 
 
 // Dialogo paraa introducir datos de la maquina expendedora
-class AddMachineDialog(val machineListener: MachineDialogListener):DialogFragment() {
+class AddMachineDialog(private val machineListener: MachineDialogListener):DialogFragment() {
 
 
     private var _binding: MachineDialogBinding?= null

@@ -121,7 +121,7 @@ class PvrInfoActivity : AppCompatActivity() {
         val prefsEdit = prefs.edit()
         prefsEdit.clear()
         prefsEdit.apply()
-        val intent = Intent(this,HomeActivity::class.java)
+        val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
     }
 

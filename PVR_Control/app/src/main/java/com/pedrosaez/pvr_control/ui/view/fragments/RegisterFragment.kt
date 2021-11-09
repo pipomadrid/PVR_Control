@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -29,7 +30,7 @@ class RegisterFragment : Fragment() {
     //variable para uso de firebase
     private lateinit var auth: FirebaseAuth
 
-    private val model = UserViewModel()
+    private val model : UserViewModel by activityViewModels()
 
 
     override fun onCreateView(
