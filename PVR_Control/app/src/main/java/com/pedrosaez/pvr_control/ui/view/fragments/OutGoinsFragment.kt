@@ -20,6 +20,7 @@ import com.pedrosaez.pvr_control.ui.dialog.AddOutGoingDialog
 import com.pedrosaez.pvr_control.ui.dialog.AddPvrDialogFragment
 import com.pedrosaez.pvr_control.ui.listeners.OutGoingModificationListener
 import com.pedrosaez.pvr_control.ui.viewmodel.OutGoinViewModel
+import java.util.*
 
 
 class OutGoinsFragment : Fragment(),OutGoingModificationListener{
@@ -114,7 +115,7 @@ class OutGoinsFragment : Fragment(),OutGoingModificationListener{
             updateSomeField =true
 
         }
-        if(outGoins.date.toString().isNotEmpty()){
+        if(outGoins.date > Date(0)){
             actualOutGoing.date = outGoins.date
             updateSomeField =true
         }

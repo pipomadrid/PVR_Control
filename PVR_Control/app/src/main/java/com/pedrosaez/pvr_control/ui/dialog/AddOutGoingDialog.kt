@@ -45,14 +45,18 @@ class AddOutGoingDialog( val outGoingListener:OutGoingModificationListener):Dial
             val etDate = binding.etDate
             val etConcept = binding.etConcept
             val viewParentfragment: View? = parentFragment?.requireView()
-            val calendar: Calendar = Calendar.getInstance()
 
 
 
+            var calendar: Calendar? = null
 
 
             etDate.setOnClickListener {
-                showDatePickerDialog(etDate, calendar)
+                calendar = Calendar.getInstance()
+                if(calendar != null){
+                    showDatePickerDialog(etDate, calendar!!)
+                }
+
             }
 
             // obtenemos el Id del pvr
@@ -82,11 +86,17 @@ class AddOutGoingDialog( val outGoingListener:OutGoingModificationListener):Dial
                         }
 
                         val concept = etConcept.text?.toString() ?:" "
-                        var myCalendar = calendar.time
+                        var myCalendar: Date? = null
+                        if(calendar!= null){
+                             myCalendar = calendar!!.time
+                        }else{
+                            myCalendar = Date(0)
+                        }
+
                         val outgoingDate = binding.etDate.text.toString()
 
                         // Creamos un gasto asociado a un PVR
-                        outGoing = OutGoins(amount!!,concept,myCalendar, _pvrId!!)
+                        outGoing = OutGoins(amount!!,concept,myCalendar!!, _pvrId!!)
 
 
                         if (tag == "addOutGoin") {
