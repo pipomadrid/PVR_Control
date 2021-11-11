@@ -41,7 +41,7 @@ class HomeActivity : AppCompatActivity() {
                         tab.text = "Mis Pvr"
                     }
                     1-> {
-                        tab.text = "totales"
+                        tab.text = "Informes"
                     }
                 }
             })

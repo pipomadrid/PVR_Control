@@ -9,20 +9,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/spinner"
-        style="@style/spinner_custom"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_spinner_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/primaryColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:text="@string/choose_pvr"
+        android:textColor="@color/primaryColor"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/spinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Spinner
+        android:id="@+id/spinner"
+        style="@style/spinner_custom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/primaryColor"
+        app:layout_constraintStart_toEndOf="@id/tv_spinner_label"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_range_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_range"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_spinner_label"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:textSize="16sp"
+        android:textColor="@color/primaryColor"/>
     <EditText
         android:id="@+id/et_inicial_date"
         android:layout_width="wrap_content"
@@ -36,20 +58,20 @@
         android:textIsSelectable="true"
         android:hint="Fecha inicial"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_range_label" />
 
     <EditText
         android:id="@+id/et_final_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:ems="8"
         android:inputType="date"
         android:focusable="false"
         android:maxLines="1"
         android:textIsSelectable="true"
-        android:hint="Fecha final"
+        android:hint="@string/final_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_inicial_date"
         />
@@ -59,107 +81,150 @@
         android:id="@+id/separator"
         android:layout_width="300dp"
         android:layout_height="5dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="44dp"
         android:background="@drawable/separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_final_date" />
 
-    <TextView
-        android:id="@+id/tv_report_sales_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:textSize="16sp"
-        android:text="@string/sales"
-        android:textColor="@color/primaryColor"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/separator" />
-
-    <TextView
-        android:id="@+id/tv_report_sales"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="32dp"
-        android:inputType="number"
-        android:textColor="@color/primaryColor"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/tv_report_sales_label"
-        app:layout_constraintTop_toBottomOf="@id/separator"
-        tools:text="11545454" />
-
-    <TextView
-        android:id="@+id/tv_report_gains_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="Ganancia:"
-        android:textColor="@color/primaryColor"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_report_sales_label" />
-
-    <TextView
-        android:id="@+id/tv_report_gains"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="32dp"
-        android:inputType="numberDecimal"
-        android:textColor="@color/primaryColor"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/tv_report_gains_label"
-        app:layout_constraintTop_toBottomOf="@+id/tv_report_sales"
-        tools:text="11545454" />
-
-    <TextView
-        android:id="@+id/tv_report_outgoing_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
-        android:text="Gastos:"
-        android:textColor="@color/primaryColor"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_report_gains_label" />
-
-    <TextView
-        android:id="@+id/tv_report_outgoins"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
-        android:textColor="@color/primaryColor"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_report_outgoing_label"
-        app:layout_constraintTop_toBottomOf="@+id/tv_report_gains"
-        tools:text="11545454" />
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rectangle"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/separator"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal">
+
+      <TextView
+          android:id="@+id/tv_report_sales_label"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginTop="16dp"
+          android:textSize="15sp"
+          android:text="@string/sales"
+          android:textColor="@color/primaryColor"
+          android:textStyle="bold" />
+      <TextView
+          android:id="@+id/tv_report_sales"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_marginTop="16dp"
+          android:inputType="number"
+          android:textColor="@color/primaryColor"
+          android:textSize="15sp"
+          android:textStyle="bold"
+          tools:text="11545454" />
+
+  </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_report_gains_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/gain"
+            android:textColor="@color/primaryColor"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_report_sales_label" />
+
+        <TextView
+            android:id="@+id/tv_report_gains"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:inputType="numberDecimal"
+            android:textColor="@color/primaryColor"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/tv_report_gains_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_report_sales"
+            tools:text="11545454" />
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+
+
+        <TextView
+            android:id="@+id/tv_report_outgoing_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/outgoins"
+            android:textColor="@color/primaryColor"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_report_gains_label" />
+
+        <TextView
+            android:id="@+id/tv_report_outgoins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            android:textColor="@color/primaryColor"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_report_outgoing_label"
+            app:layout_constraintTop_toBottomOf="@+id/tv_report_gains"
+            tools:text="11545454" />
+    </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
 
     <Button
         android:id="@+id/bt_send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="76dp"
-        android:layout_marginTop="108dp"
         android:layout_marginEnd="32dp"
-        android:text="Enviar"
+        android:layout_marginBottom="32dp"
+        android:text="@string/send"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.866"
         app:layout_constraintStart_toEndOf="@+id/et_final_date"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintBottom_toTopOf="@id/separator"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

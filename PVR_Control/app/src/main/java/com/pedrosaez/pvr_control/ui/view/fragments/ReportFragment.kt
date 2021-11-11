@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.pedrosaez.pvr_control.database.entities.OutGoins
 import com.pedrosaez.pvr_control.database.entities.PvrAndOutGoins
@@ -73,14 +74,14 @@ class ReportFragment : Fragment(){
         val spinnerAdapter  = ArrayAdapter(requireContext(), layout.simple_spinner_dropdown_item,pvrList)
         pvrSpinner.adapter = spinnerAdapter
         pvrSpinner.setSelection(0)
-        pvrList.add("Totales")
+        pvrList.add("Todos")
         pvrSpinner.onItemSelectedListener = object:
                 AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 _pvrName = pvrSpinner.selectedItem as String
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-              _pvrName = "Totales"
+              _pvrName = "Todos"
             }
 
         }
@@ -158,9 +159,14 @@ class ReportFragment : Fragment(){
                       allPvrTotalList.add(total)
                   }
               }
-              checkReport(allPvrTotalList,allPvrOutGoingList,
-                      tvSales,tvOutGoins,tvGains,reportInitCalendar,
-                      reportFinishCalendar,etInitialDate,etFinalDate)
+              if(allPvrTotalList.isNotEmpty() ) {
+                  checkReport(allPvrTotalList, allPvrOutGoingList,
+                          tvSales, tvOutGoins, tvGains, reportInitCalendar,
+                          reportFinishCalendar, etInitialDate, etFinalDate)
+              }else{
+                  Snackbar.make(requireView(),"No hay datos que mostrar",Snackbar.LENGTH_SHORT).show()
+
+              }
           }else{
               for(i in allPvrAndOutGoingList){
                   if(_pvrName == i.pvr.pvrName ){
@@ -178,9 +184,13 @@ class ReportFragment : Fragment(){
 
                   }
               }
-              checkReport(onePvrTotalList,onePvrOutGoingList,
-                      tvSales,tvOutGoins,tvGains,reportInitCalendar,
-                      reportFinishCalendar,etInitialDate,etFinalDate)
+              if (onePvrTotalList.isNotEmpty()) {
+                  checkReport(onePvrTotalList, onePvrOutGoingList,
+                          tvSales, tvOutGoins, tvGains, reportInitCalendar,
+                          reportFinishCalendar, etInitialDate, etFinalDate)
+              } else {
+                  Snackbar.make(requireView(), "No hay datos que mostrar", Snackbar.LENGTH_SHORT).show()
+              }
           }
 
             etInitialDate.text.clear()
@@ -232,30 +242,46 @@ class ReportFragment : Fragment(){
         val finishDateLocal = finishDate.time.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         var sales = 0L
         var gains = 0.0
+        var salesTotal = 0L
         var outgoings = 0.0
-        var totalMoney = 0.0
 
-        if(etInitialDate.text.isNotEmpty() && etFinalDate.text.isNullOrEmpty()){
 
+        // variable paa obtener una lista de totales filtrada por fechas
+        val totalListFilter = mutableListOf<TotalRecords>()
+
+        if(etInitialDate.text.isNotEmpty() && etFinalDate.text.isNullOrEmpty()){// campo fecha inicial con datos y campo final vacio, obtenemos los totales
+            // desde  fecha hasta la actualidad
+
+
+            // recorremos la lista de gasto  y sumamos los gastos que corresponden a las fechas filtradas
             for(outgoing in outgoingList){
                 val outGoingDate = outgoing.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
                 if(outGoingDate >= initDateLocal){
                     outgoings += outgoing.cost
-
                 }
             }
+
+            //recorremos la lista de totales y obtenemos una lsita filtrada por fechas
             for(total in totalList){
-                if(total.createAt >= initDate.time){
-                    sales += total.sells
-                    totalMoney += total.money
+                val totalDate = total.createAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                if(totalDate >= initDateLocal){
+                    totalListFilter.add(total)
                 }
             }
-            gains += (totalMoney * USER_COMISION)-outgoings
-            tvOutGoins.text = outgoings.toString()
-            tvSales.text = sales.toString()
-            tvGains.text = gains.toString()
+            // obtenemos las ventas restando a  la cantidad del ultimo registro de totales de la lista filtrada la cantidad del primer registro de totales
+            sales = totalListFilter.last().sells-totalList.first().sells
+            //restamos el primer registro de dinero de la lista totales al  ultimo registro de dienro de la lista filtrada
+            // lo multiplicamos por la comision que se lleva de las ventas el usuario y restamos los gastos correspondientes al rango de fechas
+            gains += ((totalListFilter.last().money - totalList.first().money) * USER_COMISION ) -outgoings
 
-        }else if(etInitialDate.text.isNullOrEmpty() && etFinalDate.text.isNotEmpty()){
+            fillTextview(tvOutGoins,tvSales,tvGains,outgoings,sales,gains)
+
+
+        }else if(etInitialDate.text.isNullOrEmpty() && etFinalDate.text.isNotEmpty()){ // campo fecha inicial vacio y campo final con datos, obtenemos los totales
+            // desde  la creacion hasta la fecha indicada
+
+
+            // recorremos la lista de gasto  y sumamos los gastos que corresponden a las fechas filtradas
             for(outgoing in outgoingList){
                 val outGoingDate = outgoing.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
                 if(outGoingDate <= finishDateLocal){
@@ -263,32 +289,42 @@ class ReportFragment : Fragment(){
 
                 }
             }
+            //recorremos la lista de totales y obtenemos una lsita filtrada por fechas
             for(total in totalList){
-                if(total.createAt >= finishDate.time){
-                    sales += total.sells
-                    totalMoney += total.money
-
+                val totalDate = total.createAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                if(totalDate >= finishDateLocal){
+                    totalListFilter.add(total)
                 }
             }
-            gains += (totalMoney * USER_COMISION)-outgoings
-            tvOutGoins.text = outgoings.toString()
-            tvSales.text = sales.toString()
-            tvGains.text = gains.toString()
+            // obtenemos las ventas restando a  la cantidad del ultimo registro de totales de la lista filtrada la cantidad del primer registro de totales
+            sales = totalListFilter.last().sells-totalList.first().sells
 
-        }else if(etInitialDate.text.isNullOrEmpty() && etFinalDate.text.isNullOrEmpty()){
+            //restamos el primer registro de dinero de la lista totales al  ultimo registro de dienro de la lista filtrada
+            // lo multiplicamos por la comision que se lleva de las ventas el usuario y restamos los gastos correspondientes al rango de fechas
+            gains += ((totalListFilter.last().money - totalList.first().money) * USER_COMISION ) -outgoings
+            fillTextview(tvOutGoins,tvSales,tvGains,outgoings,sales,gains)
+
+
+        }else if(etInitialDate.text.isNullOrEmpty() && etFinalDate.text.isNullOrEmpty()){ // los campos estan vacios por lo que se obtendran los totales de todas las fechas
+
+            // recorremos la lista de gasto  y sumamos los gastos que corresponden a las fechas filtradas
             for(outgoing in outgoingList){
                 outgoings += outgoing.cost
             }
-            for (total in totalList) {
-                sales += total.sells
-                totalMoney += total.money
-            }
-            gains += (totalMoney * USER_COMISION)-outgoings
-            tvOutGoins.text = outgoings.toString()
-            tvSales.text = sales.toString()
-            tvGains.text = gains.toString()
+
+            // obtenemos las ventas restando a la cantidad del ultimo registro de totales  la cantidad del primer registro de totales
+            sales = totalList.last().sells-totalList.first().sells
+
+            //restamos el primer registro de dinero de la lista totales al  ultimo registro de dinero de  la misma lista
+            // lo multiplicamos por la comision que se lleva de las ventas el usuario y restamos los gastos totales
+            gains += ((totalList.last().money - totalList.first().money) * USER_COMISION ) -outgoings
+            fillTextview(tvOutGoins,tvSales,tvGains,outgoings,sales,gains)
+
 
         }else {
+            // si los dos campos de fechas estan con datos,obtenemos los totales entre las fechas introducidas
+
+            // recorremos la lista de gasto  y sumamos los gastos que corresponden a las fechas filtradas
             for(outgoing in outgoingList){
                 val outGoingDate = outgoing.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
                 if(outGoingDate in initDateLocal..finishDateLocal){
@@ -296,20 +332,35 @@ class ReportFragment : Fragment(){
 
                 }
             }
+
+            //recorremos la lista de totales y obtenemos una lsita filtrada por fechas
             for(total in totalList){
-                if(total.createAt >=initDate.time && total.createAt <= finishDate.time){
-                    sales += total.sells
-                    totalMoney += total.money
+                val totalDate = total.createAt.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                if(totalDate in initDateLocal..finishDateLocal){
+                    totalListFilter.add(total)
                 }
             }
-            gains += (totalMoney * USER_COMISION)-outgoings
-            tvOutGoins.text = outgoings.toString()
-            tvSales.text = sales.toString()
-            tvGains.text = gains.toString()
+            // obtenemos las ventas restando a  la cantidad del ultimo registro de totales de la lista filtrada la cantidad del primer registro de totales
+            sales = totalListFilter.last().sells-totalList.first().sells
+            //restamos el primer registro de dinero de la lista totales al  ultimo registro de dinero de  la misma lista
+            // lo multiplicamos por la comision que se lleva de las ventas el usuario y restamos los gastos totales
+            gains += ((totalListFilter.last().money - totalList.first().money) * USER_COMISION ) -outgoings
+
+            fillTextview(tvOutGoins,tvSales,tvGains,outgoings,sales,gains)
+
 
         }
 
 
+
+    }
+
+    //funcion que llena los textview con los datos obtenidos
+    fun fillTextview(tvOutGoins:TextView,tvSales:TextView,tvGains:TextView,outgoings:Double,sales:Long,gains:Double){
+
+        tvOutGoins.text = outgoings.toString() + " \u20ac"
+        tvSales.text = sales.toString() +" paquetes"
+        tvGains.text =  String.format("%.2f", gains)  + " \u20ac"
 
     }
 

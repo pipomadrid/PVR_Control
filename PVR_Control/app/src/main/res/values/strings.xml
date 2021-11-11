@@ -61,4 +61,10 @@
     <string name="machine_new_or_used">Necesitamos saber si la máquina que vas a usar es totalmente nueva o ya ha sido usada</string>
     <string name="new_machine">Nueva</string>
     <string name="used_machine">Usada</string>
+    <string name="final_date">Fecha final</string>
+    <string name="gain">Ganancia</string>
+    <string name="outgoins">Gastos:</string>
+    <string name="send">Enviar</string>
+    <string name="select_range">Selecciona un rango de fechas:</string>
+    <string name="choose_pvr">Elige un PVR:</string>
 </resources>

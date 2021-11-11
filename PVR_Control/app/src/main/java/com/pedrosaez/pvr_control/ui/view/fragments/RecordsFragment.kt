@@ -38,7 +38,6 @@ class RecordsFragment : Fragment() {
 
         //obtenemos los datos del Pvr que vamos a usar
         val prefs = requireActivity().getSharedPreferences((getString(R.string.prefs_file)), Context.MODE_PRIVATE)
-        val pvrNamePrefs: String? = prefs.getString("pvrName", "error ")
         val pvrId = prefs.getLong("pvrId", -1)
 
 
@@ -61,8 +60,6 @@ class RecordsFragment : Fragment() {
 
             /*obtenemos la lista de registros de el pvr por Id , y llenamos los textview con los datos
              del último registro*/
-
-
 
             for (i in it) {
                 if (it != null) {
@@ -87,41 +84,15 @@ class RecordsFragment : Fragment() {
             addRecordDialog.show(childFragmentManager,"addRecord")
         }
 
-       /* btDelete.setOnClickListener {
-            view
-            val builder = AlertDialog.Builder(context)
-            builder.setMessage("¿Estas seguro de eliminar los datos del ultimo registro?, se modificarán los datos de venta del pvr.")
-                    //al confirmar , se elimina el registro de la maquina
-                    .setPositiveButton("Eliminar",
-                            DialogInterface.OnClickListener { dialog, id ->
-                                model.delete(lastRecord!!)
-                                cardView.isVisible = false
 
-                            })
-                    .setNegativeButton(("cancelar"),
-                            DialogInterface.OnClickListener { dialog, id ->
-                                dialog.cancel()
-                            })
-            // Create the AlertDialog object and return it
-            builder.create()
-            builder.show()
-
-        }*/
 
         btEdit.setOnClickListener {
-
             addRecordDialog.show(childFragmentManager,"updateRecord")
-
 
         }
 
 
         return binding.root
     }
-    private fun deleteRecord(record: TotalRecords) {
-        binding.cardView.isVisible = false
-    }
-
-
 
 }

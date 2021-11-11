@@ -10,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import com.google.android.material.snackbar.Snackbar
 import com.pedrosaez.pvr_control.R
 import com.pedrosaez.pvr_control.database.entities.PvrMachine
 import com.pedrosaez.pvr_control.databinding.FragmentMachineBinding
@@ -25,8 +23,8 @@ class MachineFragment : Fragment(),AddMachineDialog.MachineDialogListener {
     private var actualMachine: PvrMachine? = null
     private var _binding: FragmentMachineBinding? = null
     private val binding get() = _binding!!
-    private var cardIsvisible:Boolean = false
-    private var addBtIsvisible:Boolean = true
+    private var cardIsvisible: Boolean = false
+    private var addBtIsvisible: Boolean = true
 
     private val model: MachineViewModel by activityViewModels()
 
@@ -40,7 +38,6 @@ class MachineFragment : Fragment(),AddMachineDialog.MachineDialogListener {
         val addMachineDialog = AddMachineDialog(this)
 
 
-
         //Setup
 
         //obtenemos los datos del Pvr que vamos a usar
@@ -52,6 +49,7 @@ class MachineFragment : Fragment(),AddMachineDialog.MachineDialogListener {
         val deleteButton = binding.btDelete
         val editButton = binding.btEdit
         val cardView = binding.cardView
+        var btChangeMachine = binding.btChangeMachine
 
         cardView.isVisible = cardIsvisible
         addButton.isVisible = addBtIsvisible
@@ -87,6 +85,7 @@ class MachineFragment : Fragment(),AddMachineDialog.MachineDialogListener {
 
         })
 
+
         // al pulsar boton de eliminar  creamos un dialogo para confirmar
         deleteButton.setOnClickListener {
             view
@@ -116,10 +115,7 @@ class MachineFragment : Fragment(),AddMachineDialog.MachineDialogListener {
             addMachineDialog.show(childFragmentManager, "updateMachine")
         }
 
-
         return binding.root
-
-
     }
 
     private fun deleteMachine(machine: PvrMachine) {
@@ -136,4 +132,5 @@ class MachineFragment : Fragment(),AddMachineDialog.MachineDialogListener {
         binding.btNewMachine.isVisible = false
     }
 }
+
 
