@@ -75,11 +75,11 @@ class SalesSummaryFragment : Fragment() {
 
 
         // variables para realizar las operaciones
-        var parcialSalesLong: Long
+        var parcialSalesLong = 0.0
         var parcialBillLong = 0L
         var parcialCoinsDouble = 0.0
         var parcialMoneyDouble = 0.0
-        var parcialPaymentDouble: Double
+        var parcialPaymentDouble = 0.0
         var parcialGainDouble:Double = 0.0
         var totalGainDouble :Double = 0.0
         var totalPaymentPvrDouble:Double = 0.0
